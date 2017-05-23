@@ -11,7 +11,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using NT.Infrastructure;
-using NT.MigrationConsole.SeedData;
 
 namespace NT.MigrationConsole
 {
@@ -104,7 +103,7 @@ namespace NT.MigrationConsole
                 context.Database.Migrate();
 
                 await UserSeeder.Seed(context);
-                await CustomerContextSeeder.Seed(context);
+                // await CustomerContextSeeder.Seed(context);
             }
         }
     }

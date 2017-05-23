@@ -1,14 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using NT.Core.CustomerContext;
+using NT.CustomerService.Core;
 using NT.Infrastructure;
 
 namespace NT.WebApi.CustomerContext
 {
     [Route("api/customers")]
-    [Authorize]
+    // [Authorize]
     public class CustomerApiController : Controller
     {
         private readonly RestClient _restClient;
@@ -22,6 +22,12 @@ namespace NT.WebApi.CustomerContext
         public async Task<IEnumerable<Customer>> Get()
         {
             return await _restClient.GetAsync<List<Customer>>("customer_service", "/api/customers");
+        }
+
+        [HttpGet("{id}")]
+        public async Task<Customer> Get(Guid id)
+        {
+            return await _restClient.GetAsync<Customer>("customer_service", $"/api/customers/{id}");
         }
 
         [HttpPost]

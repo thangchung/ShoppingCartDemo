@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using NT.Core;
-using NT.Core.CustomerContext;
-using NT.Infrastructure.CustomerContext;
+using NT.CustomerService.Core;
 
-namespace NT.CustomerService
+namespace NT.CustomerService.Api
 {
     [Route("api/customers")]
     // [Authorize]

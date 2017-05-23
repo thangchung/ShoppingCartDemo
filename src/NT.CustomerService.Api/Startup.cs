@@ -10,10 +10,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using NT.Core;
+using NT.CustomerService.Infrastructure;
 using NT.Infrastructure;
-using NT.Infrastructure.CustomerContext;
 
-namespace NT.CustomerService
+namespace NT.CustomerService.Api
 {
     public class Startup
     {
@@ -36,12 +36,13 @@ namespace NT.CustomerService
 
             services.AddMicrophone<ConsulProvider>();
 
-            services.AddDbContext<AppDbContext>(options =>
+            services.AddDbContext<CustomerDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("MainDb")));
 
             // Core & Infra register
-            builder.RegisterGeneric(typeof(EfRepository<>))
+            builder.RegisterGeneric(typeof(GenericEfRepository<>))
                 .As(typeof(IRepository<>));
+
             builder.RegisterType<CustomerRepository>()
                 .AsImplementedInterfaces();
 

@@ -7,11 +7,13 @@ using NT.Core;
 
 namespace NT.Infrastructure
 {
-    public class EfRepository<TEntity> : IRepository<TEntity> where TEntity : EntityBase
+    public class EfRepository<TDbContext, TEntity> : IRepository<TEntity> 
+        where TEntity : EntityBase
+        where TDbContext : DbContext
     {
-        protected readonly AppDbContext DbContext;
+        protected readonly TDbContext DbContext;
 
-        public EfRepository(AppDbContext dbContext)
+        public EfRepository(TDbContext dbContext)
         {
             DbContext = dbContext;
         }
@@ -57,6 +59,13 @@ namespace NT.Infrastructure
             }
 
             return await rett.ToListAsync();
+        }
+    }
+
+    public class EfRepository<TEntity> : EfRepository<AppDbContext, TEntity>  where TEntity : EntityBase
+    {
+        public EfRepository(AppDbContext dbContext) : base(dbContext)
+        {
         }
     }
 }

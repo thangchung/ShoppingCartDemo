@@ -32,6 +32,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\NT.Core\NT.Core.csproj" />
+    <ProjectReference Include="..\NT.CustomerService.Core\NT.CustomerService.Core.csproj" />
     <ProjectReference Include="..\NT.Infrastructure\NT.Infrastructure.csproj" />
   </ItemGroup>
 

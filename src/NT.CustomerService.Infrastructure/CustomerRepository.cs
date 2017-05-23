@@ -2,15 +2,15 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using NT.Core.CustomerContext;
+using NT.CustomerService.Core;
 
-namespace NT.Infrastructure.CustomerContext
+namespace NT.CustomerService.Infrastructure
 {
     public class CustomerRepository : ICustomerRepository
     {
-        private readonly AppDbContext _dbContext;
+        private readonly CustomerDbContext _dbContext;
 
-        public CustomerRepository(AppDbContext dbContext)
+        public CustomerRepository(CustomerDbContext dbContext)
         {
             _dbContext = dbContext;
         }
@@ -30,11 +30,5 @@ namespace NT.Infrastructure.CustomerContext
                 .Include(x => x.ContactInfo)
                 .FirstOrDefaultAsync(x => x.Id == id);
         }
-    }
-
-    public interface ICustomerRepository
-    {
-        Task<IEnumerable<Customer>> GetFullCustomers();
-        Task<Customer> GetFullCustomer(Guid id);
     }
 }

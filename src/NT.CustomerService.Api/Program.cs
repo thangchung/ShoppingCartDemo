@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using Microsoft.AspNetCore.Hosting;
 
-namespace NT.CustomerService
+namespace NT.CustomerService.Api
 {
     public class Program
     {

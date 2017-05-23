@@ -4,12 +4,14 @@
 
 ### Migration
 
-`dotnet ef migrations add InitialIdentityServerPersistedGrantDbMigration -c PersistedGrantDbContext -o Migrations/PersistedGrantDb`
+- IdentityServer
 
+`dotnet ef migrations add InitialIdentityServerPersistedGrantDbMigration -c PersistedGrantDbContext -o Migrations/PersistedGrantDb`
 `dotnet ef migrations add InitialIdentityServerConfigurationDbMigration -c ConfigurationDbContext -o Migrations/ConfigurationDb`
 
-`dotnet ef migrations add InitDatabase -c AppDbContext -o Migrations/SampleDb`
+- Customer Service
 
+`dotnet ef migrations add InitDatabase -c CustomerDbContext`
 `dotnet run`
 
 ### Login
