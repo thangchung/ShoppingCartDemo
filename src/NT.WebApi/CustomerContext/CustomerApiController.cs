@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using NT.Core;
 using NT.Core.CustomerContext;
-using NT.Infrastructure.CustomerContext;
+using NT.Infrastructure;
 
 namespace NT.WebApi.CustomerContext
 {
@@ -13,30 +11,17 @@ namespace NT.WebApi.CustomerContext
     [Authorize]
     public class CustomerApiController : Controller
     {
-        private readonly ICustomerRepository _customerRepo;
-        private readonly IRepository<Customer> _genericCustomerRepository;
+        private readonly RestClient _restClient;
 
-        public CustomerApiController(IRepository<Customer> genericCustomerRepository, ICustomerRepository customerRepo)
+        public CustomerApiController(RestClient restClient)
         {
-            _genericCustomerRepository = genericCustomerRepository;
-            _customerRepo = customerRepo;
+            _restClient = restClient;
         }
 
         [HttpGet]
         public async Task<IEnumerable<Customer>> Get()
         {
-            return await _genericCustomerRepository.ListAsync(
-                new ISpecification<Customer>[]
-                {
-                    new CustomerWithAddressInfoSpec(),
-                    new CustomerWithContactInfoSpec()
-                });
-        }
-
-        [HttpGet("{id}")]
-        public async Task<Customer> Get(Guid id)
-        {
-            return await _customerRepo.GetFullCustomer(id);
+            return await _restClient.GetAsync<List<Customer>>("customer_service", "/api/customers");
         }
 
         [HttpPost]

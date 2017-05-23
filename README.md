@@ -15,3 +15,9 @@
 ### Login
 
 `root@shoppingcart.com` / `root`
+
+### Services
+
+- Security Service: http://localhost:9999/.well-known/openid-configuration
+- API Gateway: http://localhost:8888/swagger
+- Customer Service: http://localhost:8801

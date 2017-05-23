@@ -6,16 +6,15 @@ using System.Threading.Tasks;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using IdentityServer4.Models;
+using Microphone.AspNet;
+using Microphone.Consul;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using NT.Core;
 using NT.Infrastructure;
-using NT.Infrastructure.CustomerContext;
 using Swashbuckle.AspNetCore.Swagger;
 
 namespace NT.WebApi
@@ -26,8 +25,8 @@ namespace NT.WebApi
         {
             var builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
+                .AddJsonFile("appsettings.json", false, true)
+                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", true)
                 .AddEnvironmentVariables();
             Configuration = builder.Build();
             Environment = env;
@@ -54,6 +53,11 @@ namespace NT.WebApi
 
             // Add framework services.
             services.AddMvc();
+            services.AddMicrophone<ConsulProvider>();
+            services.Configure<ConsulOptions>(o =>
+            {
+                o.Host = "localhost";
+            });
 
             services.AddSwaggerGen(options =>
             {
@@ -77,14 +81,8 @@ namespace NT.WebApi
                 });
             });
 
-            services.AddDbContext<AppDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("MainDb")));
-
-            // Core & Infra register
-            builder.RegisterGeneric(typeof(EfRepository<>))
-                .As(typeof(IRepository<>));
-            builder.RegisterType<CustomerRepository>()
-                .AsImplementedInterfaces();
+            builder.RegisterType<RestClient>()
+                .AsSelf();
 
             builder.Populate(services);
             return builder.Build().Resolve<IServiceProvider>();
@@ -104,7 +102,7 @@ namespace NT.WebApi
                 AutomaticChallenge = true,
                 Authority = "http://localhost:9999",
                 SaveToken = true,
-                AllowedScopes = new[] { "customer_service" },
+                AllowedScopes = new[] {"customer_service"},
                 RequireHttpsMetadata = false,
                 JwtBearerEvents = new JwtBearerEvents
                 {
@@ -114,7 +112,8 @@ namespace NT.WebApi
 
             app.UseStaticFiles().UseCors("CorsPolicy");
 
-            app.UseMvc();
+            app.UseMvc()
+                .UseMicrophone("api_gateway", "1.0");
 
             app.UseSwagger().UseSwaggerUI(
                 c =>
