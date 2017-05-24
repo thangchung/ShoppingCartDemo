@@ -34,6 +34,8 @@
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="1.1.2" />
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="1.1.2" />
     <PackageReference Include="Microsoft.VisualStudio.Web.BrowserLink" Version="1.1.2" />
+    <PackageReference Include="Microphone.AspNet" Version="0.6.7" />
+    <PackageReference Include="Microphone.Core" Version="0.6.7" />
   </ItemGroup>
 
   <ItemGroup>

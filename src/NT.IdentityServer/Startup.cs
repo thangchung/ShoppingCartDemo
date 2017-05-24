@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using Microphone.AspNet;
+using Microphone.Consul;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -29,6 +31,8 @@ namespace NT.IdentityServer
         public void ConfigureServices(IServiceCollection services)
         {
             var connString = Configuration.GetConnectionString("DefaultConnection");
+
+            services.AddMicrophone<ConsulProvider>();
 
             // Add framework services.
             services.AddDbContext<IdentityServerDbContext>(options =>
@@ -90,6 +94,8 @@ namespace NT.IdentityServer
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+
+            app.UseMicrophone("security_service", "1.0");
         }
     }
 }

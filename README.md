@@ -31,4 +31,8 @@
 - Security Service: http://localhost:9999/.well-known/openid-configuration
 - API Gateway: http://localhost:8888/swagger
 - Discovery Service: http://localhost:8500
+
+![Discovery Service](https://github.com/thangchung/ShoppingCartDemo/blob/master/docs/ServiceDiscovery.png)
+
 - Customer Service: http://localhost:8801
+- Order Service: http://localhost:8802
