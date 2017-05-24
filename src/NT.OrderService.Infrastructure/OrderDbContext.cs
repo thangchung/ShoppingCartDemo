@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using NT.Core.SharedKernel;
-using NT.CustomerService.Core;
 using NT.Infrastructure;
+using NT.OrderService.Core;
 
-namespace NT.CustomerService.Infrastructure
+namespace NT.OrderService.Infrastructure
 {
-    public class CustomerDbContext : DbContext
+    public class OrderDbContext : DbContext
     {
-        public CustomerDbContext(DbContextOptions<CustomerDbContext> options)
+        public OrderDbContext(DbContextOptions<OrderDbContext> options)
             : base(options)
         {
         }
@@ -18,16 +18,17 @@ namespace NT.CustomerService.Infrastructure
         {
             var entityTypes = new List<Type>
             {
-                typeof(Customer)
+                typeof(Order),
+                typeof(OrderDetail)
             };
 
             var valueTypes = new List<Type>
             {
-                typeof(AddressInfo),
-                typeof(ContactInfo)
+                typeof(ShipInfo),
+                typeof(AddressInfo)
             };
 
-            base.OnModelCreating(modelBuilder.RegisterTypes(entityTypes, valueTypes, "customer"));
+            base.OnModelCreating(modelBuilder.RegisterTypes(entityTypes, valueTypes, "order"));
         }
     }
 }

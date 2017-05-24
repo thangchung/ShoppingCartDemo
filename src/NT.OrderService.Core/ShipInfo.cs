@@ -1,10 +1,15 @@
 ﻿using System;
+using NT.Core;
 using NT.Core.SharedKernel;
 
-namespace NT.Core.OrderContext
+namespace NT.OrderService.Core
 {
     public class ShipInfo : ValueObject
     {
+        internal ShipInfo()
+        {
+        }
+
         public ShipInfo(Guid id, string name, AddressInfo addressInfo)
         {
             Id = id;
@@ -14,6 +19,6 @@ namespace NT.Core.OrderContext
 
         public Guid Id { get; private set; }
         public string Name { get; private set; }
-        public AddressInfo AddressInfo { get; private set; }
+        public virtual AddressInfo AddressInfo { get; private set; }
     }
 }

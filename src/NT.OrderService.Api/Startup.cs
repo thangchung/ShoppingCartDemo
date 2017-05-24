@@ -10,9 +10,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using NT.Core;
-using NT.CustomerService.Infrastructure;
+using NT.OrderService.Infrastructure;
 
-namespace NT.CustomerService.Api
+namespace NT.OrderService.Api
 {
     public class Startup
     {
@@ -28,22 +28,18 @@ namespace NT.CustomerService.Api
 
         public IConfigurationRoot Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             var builder = new ContainerBuilder();
 
             services.AddMicrophone<ConsulProvider>();
 
-            services.AddDbContext<CustomerDbContext>(options =>
+            services.AddDbContext<OrderDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("MainDb")));
 
             // Core & Infra register
             builder.RegisterGeneric(typeof(GenericEfRepository<>))
                 .As(typeof(IRepository<>));
-
-            builder.RegisterType<CustomerRepository>()
-                .AsImplementedInterfaces();
 
             // Add framework services.
             services.AddMvc();
@@ -59,7 +55,7 @@ namespace NT.CustomerService.Api
             loggerFactory.AddDebug();
 
             app.UseMvc();
-            app.UseMicrophone("customer_service", "1.0");
+            app.UseMicrophone("order_service", "1.0");
         }
     }
 }

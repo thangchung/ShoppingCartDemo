@@ -49,6 +49,18 @@ namespace NT.Infrastructure
             await DbContext.SaveChangesAsync();
         }
 
+        public virtual async Task<TEntity> GetByIdAsync(Guid id, ISpecification<TEntity>[] specs)
+        {
+            var ret = DbContext.Set<TEntity>();
+            IQueryable<TEntity> rett = null;
+            foreach (var spec in specs)
+            {
+                rett = ret.Include(spec.Include);
+            }
+
+            return await rett.SingleOrDefaultAsync(e => e.Id.Equals(id));
+        }
+
         public async Task<IEnumerable<TEntity>> ListAsync(ISpecification<TEntity>[] specs)
         {
             var ret = DbContext.Set<TEntity>();
