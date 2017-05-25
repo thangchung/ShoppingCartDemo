@@ -1,6 +1,8 @@
-﻿using NT.Core.SharedKernel;
+﻿using System.Collections.Generic;
+using NT.Core;
+using NT.Core.SharedKernel;
 
-namespace NT.Core.CatalogContext
+namespace NT.CatalogService.Core
 {
     public class Supplier : EntityBase
     {
@@ -9,5 +11,6 @@ namespace NT.Core.CatalogContext
         public string ContactTitle { get; set; }
         public AddressInfo AddressInfo { get; set; }
         public ContactInfo ContactInfo { get; set; }
+        public virtual List<Product> Products { get; set; }
     }
 }

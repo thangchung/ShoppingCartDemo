@@ -1,6 +1,7 @@
 ﻿using System;
+using NT.Core;
 
-namespace NT.Core.CatalogContext
+namespace NT.CatalogService.Core
 {
     public class Product : EntityBase
     {
@@ -10,5 +11,7 @@ namespace NT.Core.CatalogContext
         public string Model { get; set; }
         public DateTime DateAdded { get; set; }
         public Status Status { get; set; }
+        public virtual Supplier Supplier { get; set; }
+        public Guid SupplierId { get; set; }
     }
 }

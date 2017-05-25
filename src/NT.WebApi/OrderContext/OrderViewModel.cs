@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using NT.OrderService.Core;
 
 namespace NT.WebApi.OrderContext
 {
@@ -18,6 +17,14 @@ namespace NT.WebApi.OrderContext
         public string Region { get; set; }
         public string PostalCode { get; set; }
         public string Country { get; set; }
-        public List<OrderDetail> OrderDetails { get; set; }
+        public List<OrderDetailViewModel> OrderDetails { get; set; }
+    }
+
+    public class OrderDetailViewModel
+    {
+        public Guid ProductId { get; set; }
+        public string ProductName { get; set; }
+        public double ProductPrice { get; set; }
+        public int Quantity { get; set; }
     }
 }

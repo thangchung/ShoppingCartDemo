@@ -23,7 +23,8 @@ namespace NT.OrderService.Migrator
                     new OrderDetail
                     {
                         Id = Guid.NewGuid(),
-                        ProductId = new Guid("85db18f3-9c27-47d8-bd45-86dd67068960")
+                        ProductId = new Guid("85db18f3-9c27-47d8-bd45-86dd67068960"),
+                        Quantity = 2
                     }
                 }
             };

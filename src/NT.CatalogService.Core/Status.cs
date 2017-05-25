@@ -1,4 +1,4 @@
-﻿namespace NT.Core.CatalogContext
+﻿namespace NT.CatalogService.Core
 {
     public enum Status
     {

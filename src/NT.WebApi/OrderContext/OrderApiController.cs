@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using NT.CatalogService.Core;
 using NT.CustomerService.Core;
 using NT.Infrastructure;
 using NT.OrderService.Core;
@@ -27,6 +28,19 @@ namespace NT.WebApi.OrderContext
         {
             var order = await RestClient.GetAsync<Order>("order_service", $"/api/orders/{id}");
             var customer = await RestClient.GetAsync<Customer>("customer_service", $"/api/customers/{order.CustomerId}");
+            var details = new List<OrderDetailViewModel>();
+            foreach (var orderDetail in order.OrderDetails)
+            {
+                var product = await RestClient.GetAsync<Product>("catalog_service", $"/api/products/{orderDetail.ProductId}");
+                details.Add(new OrderDetailViewModel
+                {
+                    ProductId = product.Id,
+                    ProductName = product.Name,
+                    ProductPrice = product.Price,
+                    Quantity = orderDetail.Quantity
+                });
+            }
+            
             return new OrderViewModel
             {
                 OrderId = order.Id,
@@ -39,7 +53,7 @@ namespace NT.WebApi.OrderContext
                 Region = order.ShipInfo.AddressInfo.Region,
                 PostalCode = order.ShipInfo.AddressInfo.PostalCode,
                 Country = order.ShipInfo.AddressInfo.Country,
-                OrderDetails = order.OrderDetails
+                OrderDetails = details
             };
         }
 

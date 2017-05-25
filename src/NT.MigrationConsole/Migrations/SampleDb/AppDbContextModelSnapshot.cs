@@ -4,8 +4,6 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using NT.Infrastructure;
-using NT.Core.CatalogContext;
-
 namespace NT.MigrationConsole.Migrations.SampleDb
 {
     [DbContext(typeof(AppDbContext))]
