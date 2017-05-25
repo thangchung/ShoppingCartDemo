@@ -41,6 +41,9 @@ namespace NT.OrderService.Api
             builder.RegisterGeneric(typeof(GenericEfRepository<>))
                 .As(typeof(IRepository<>));
 
+            builder.RegisterType<OrderRepository>()
+                .AsImplementedInterfaces();
+
             // Add framework services.
             services.AddMvc();
 

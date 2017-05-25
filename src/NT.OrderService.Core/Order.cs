@@ -10,6 +10,6 @@ namespace NT.OrderService.Core
         public Guid EmployeeId { get; set; }
         public DateTime OrderDate { get; set; }
         public virtual ShipInfo ShipInfo { get; set; }
-        public virtual ICollection<OrderDetail> OrderDetails { get; set; }
+        public virtual List<OrderDetail> OrderDetails { get; set; }
     }
 }

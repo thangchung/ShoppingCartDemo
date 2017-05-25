@@ -12,7 +12,7 @@ namespace NT.IdentityServer
 
             var host = new WebHostBuilder()
                 .UseKestrel()
-                .UseUrls("http://localhost:9999")
+                .UseUrls("http://0.0.0.0:9999")
                 .UseContentRoot(Directory.GetCurrentDirectory())
                 .UseIISIntegration()
                 .UseStartup<Startup>()

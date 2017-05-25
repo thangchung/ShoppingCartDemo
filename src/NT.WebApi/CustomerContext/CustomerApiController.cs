@@ -8,31 +8,29 @@ using NT.Infrastructure;
 namespace NT.WebApi.CustomerContext
 {
     [Route("api/customers")]
-    // [Authorize]
-    public class CustomerApiController : Controller
+    public class CustomerApiController : BaseGatewayController
     {
-        private readonly RestClient _restClient;
-
-        public CustomerApiController(RestClient restClient)
+        public CustomerApiController(RestClient restClient) 
+            : base(restClient)
         {
-            _restClient = restClient;
         }
 
         [HttpGet]
         public async Task<IEnumerable<Customer>> Get()
         {
-            return await _restClient.GetAsync<List<Customer>>("customer_service", "/api/customers");
+            return await RestClient.GetAsync<List<Customer>>("customer_service", "/api/customers");
         }
 
         [HttpGet("{id}")]
         public async Task<Customer> Get(Guid id)
         {
-            return await _restClient.GetAsync<Customer>("customer_service", $"/api/customers/{id}");
+            return await RestClient.GetAsync<Customer>("customer_service", $"/api/customers/{id}");
         }
 
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<Customer> Post([FromBody] Customer customer)
         {
+            return await RestClient.PostAsync<Customer>("customer_service", "/api/customers", customer);
         }
 
         [HttpPut("{id}")]

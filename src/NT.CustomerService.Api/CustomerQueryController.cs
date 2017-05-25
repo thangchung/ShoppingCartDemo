@@ -14,7 +14,8 @@ namespace NT.CustomerService.Api
         private readonly ICustomerRepository _customerRepo;
         private readonly IRepository<Customer> _genericCustomerRepository;
 
-        public CustomerQueryController(ICustomerRepository customerRepo, IRepository<Customer> genericCustomerRepository)
+        public CustomerQueryController(ICustomerRepository customerRepo,
+            IRepository<Customer> genericCustomerRepository)
         {
             _customerRepo = customerRepo;
             _genericCustomerRepository = genericCustomerRepository;
@@ -35,6 +36,12 @@ namespace NT.CustomerService.Api
         public async Task<Customer> Get(Guid id)
         {
             return await _customerRepo.GetFullCustomer(id);
+        }
+
+        [HttpPost]
+        public async Task<Customer> Post([FromBody] Customer customer)
+        {
+            return await _genericCustomerRepository.AddAsync(customer);
         }
     }
 }

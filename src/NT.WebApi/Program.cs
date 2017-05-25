@@ -9,6 +9,7 @@ namespace NT.WebApi
         {
             var host = new WebHostBuilder()
                 .UseKestrel()
+                .UseUrls("http://0.0.0.0:8888")
                 .UseContentRoot(Directory.GetCurrentDirectory())
                 .UseIISIntegration()
                 .UseStartup<Startup>()

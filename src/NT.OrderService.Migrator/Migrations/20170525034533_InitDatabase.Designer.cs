@@ -8,7 +8,7 @@ using NT.OrderService.Infrastructure;
 namespace NT.OrderService.Migrator.Migrations
 {
     [DbContext(typeof(OrderDbContext))]
-    [Migration("20170524161417_InitDatabase")]
+    [Migration("20170525034533_InitDatabase")]
     partial class InitDatabase
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

@@ -2,32 +2,45 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using NT.CustomerService.Core;
 using NT.Infrastructure;
 using NT.OrderService.Core;
 
 namespace NT.WebApi.OrderContext
 {
     [Route("api/orders")]
-    // [Authorize]
-    public class OrderApiController : Controller
+    public class OrderApiController : BaseGatewayController
     {
-        private readonly RestClient _restClient;
-
-        public OrderApiController(RestClient restClient)
+        public OrderApiController(RestClient restClient) 
+            : base(restClient)
         {
-            _restClient = restClient;
         }
 
         [HttpGet]
         public async Task<IEnumerable<Order>> Get()
         {
-            return await _restClient.GetAsync<List<Order>>("order_service", "/api/orders");
+            return await RestClient.GetAsync<List<Order>>("order_service", "/api/orders");
         }
 
         [HttpGet("{id}")]
-        public async Task<Order> Get(Guid id)
+        public async Task<OrderViewModel> Get(Guid id)
         {
-            return await _restClient.GetAsync<Order>("order_service", $"/api/orders/{id}");
+            var order = await RestClient.GetAsync<Order>("order_service", $"/api/orders/{id}");
+            var customer = await RestClient.GetAsync<Customer>("customer_service", $"/api/customers/{order.CustomerId}");
+            return new OrderViewModel
+            {
+                OrderId = order.Id,
+                CustomerId = customer.Id,
+                CustomerName = $"{customer.FirstName} {customer.LastName}",
+                OrderDate = order.OrderDate,
+                ShipInfoName = order.ShipInfo.Name,
+                Address = order.ShipInfo.AddressInfo.Address,
+                City = order.ShipInfo.AddressInfo.City,
+                Region = order.ShipInfo.AddressInfo.Region,
+                PostalCode = order.ShipInfo.AddressInfo.PostalCode,
+                Country = order.ShipInfo.AddressInfo.Country,
+                OrderDetails = order.OrderDetails
+            };
         }
 
         [HttpPost]
