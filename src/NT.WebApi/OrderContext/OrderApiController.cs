@@ -28,6 +28,7 @@ namespace NT.WebApi.OrderContext
         {
             var order = await RestClient.GetAsync<Order>("order_service", $"/api/orders/{id}");
             var customer = await RestClient.GetAsync<Customer>("customer_service", $"/api/customers/{order.CustomerId}");
+            var user = await RestClient.GetAsync<UserViewModel>("security_service", $"/api/users/{order.EmployeeId}");
             var details = new List<OrderDetailViewModel>();
             foreach (var orderDetail in order.OrderDetails)
             {
@@ -46,6 +47,8 @@ namespace NT.WebApi.OrderContext
                 OrderId = order.Id,
                 CustomerId = customer.Id,
                 CustomerName = $"{customer.FirstName} {customer.LastName}",
+                EmployeeId = new Guid(user.Id),
+                EmployeeName = user.Email,
                 OrderDate = order.OrderDate,
                 ShipInfoName = order.ShipInfo.Name,
                 Address = order.ShipInfo.AddressInfo.Address,

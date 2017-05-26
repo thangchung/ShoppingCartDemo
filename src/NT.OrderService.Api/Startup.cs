@@ -35,7 +35,7 @@ namespace NT.OrderService.Api
             services.AddMicrophone<ConsulProvider>();
 
             services.AddDbContext<OrderDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("MainDb")));
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             // Core & Infra register
             builder.RegisterGeneric(typeof(GenericEfRepository<>))

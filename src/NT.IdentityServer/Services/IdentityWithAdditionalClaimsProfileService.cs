@@ -7,7 +7,7 @@ using IdentityServer4.Extensions;
 using IdentityServer4.Models;
 using IdentityServer4.Services;
 using Microsoft.AspNetCore.Identity;
-using NT.IdentityServer.Quickstart;
+using NT.IdentityServer.Infrastructure;
 
 namespace NT.IdentityServer.Services
 {

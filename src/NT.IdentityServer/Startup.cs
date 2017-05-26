@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using NT.IdentityServer.Quickstart;
+using NT.IdentityServer.Infrastructure;
 using NT.IdentityServer.Services;
 
 namespace NT.IdentityServer
@@ -48,6 +48,8 @@ namespace NT.IdentityServer
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddTransient<ISmsSender, AuthMessageSender>();
+
+            services.AddTransient<IUserRepository, UserRepository>();
 
             services.AddIdentityServer()
                 .AddTemporarySigningCredential()

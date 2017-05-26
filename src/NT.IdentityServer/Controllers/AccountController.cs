@@ -2,10 +2,6 @@
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using NT.IdentityServer.Models.AccountViewModels;
-using NT.IdentityServer.Quickstart;
-using NT.IdentityServer.Quickstart.Account;
-using NT.IdentityServer.Services;
 using IdentityServer4.Services;
 using IdentityServer4.Stores;
 using Microsoft.AspNetCore.Authorization;
@@ -15,8 +11,13 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
+using NT.IdentityServer.Infrastructure;
+using NT.IdentityServer.Models.AccountViewModels;
+using NT.IdentityServer.Quickstart;
+using NT.IdentityServer.Quickstart.Account;
+using NT.IdentityServer.Services;
 
-namespace BlogCore.IdentityServer.Controllers
+namespace NT.IdentityServer.Controllers
 {
     [Authorize]
     [SecurityHeaders]

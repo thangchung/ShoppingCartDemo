@@ -1,14 +1,18 @@
-### Service Discovery (Windows only)
+### Introduction
 
-`consul.exe agent -dev`
+The ShoppingCart project only for demo in training courses.
 
 ### Migration
 
-- IdentityServer
+- Sercurity Service
 
 `dotnet ef migrations add InitialIdentityServerPersistedGrantDbMigration -c PersistedGrantDbContext -o Migrations/PersistedGrantDb`
 
 `dotnet ef migrations add InitialIdentityServerConfigurationDbMigration -c ConfigurationDbContext -o Migrations/ConfigurationDb`
+
+`dotnet ef migrations add InitDatabase -c IdentityServerDbContext -o Migrations/IdentityDb`
+
+`dotnet run`
 
 - Customer Service
 
@@ -22,9 +26,19 @@
 
 `dotnet run`
 
+- Catalog Service
+
+`dotnet ef migrations add InitDatabase -c CatalogDbContext`
+
+`dotnet run`
+
 ### Login
 
 `root@shoppingcart.com` / `root`
+
+### Service Discovery (Windows only)
+
+`consul.exe agent -dev`
 
 ### Services
 
@@ -36,3 +50,4 @@
 
 - Customer Service: http://localhost:8801
 - Order Service: http://localhost:8802
+- Catalog Service: http://localhost:8803

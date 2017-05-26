@@ -1,10 +1,10 @@
 ﻿using System.Threading.Tasks;
-using NT.IdentityServer.Quickstart;
-using NT.IdentityServer.Quickstart.Home;
 using IdentityServer4.Services;
 using Microsoft.AspNetCore.Mvc;
+using NT.IdentityServer.Quickstart;
+using NT.IdentityServer.Quickstart.Home;
 
-namespace BlogCore.IdentityServer.Controllers
+namespace NT.IdentityServer.Controllers
 {
     [SecurityHeaders]
     public class HomeController : Controller

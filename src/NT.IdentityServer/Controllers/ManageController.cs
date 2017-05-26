@@ -1,14 +1,15 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
-using NT.IdentityServer.Models.ManageViewModels;
-using NT.IdentityServer.Quickstart;
-using NT.IdentityServer.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using NT.IdentityServer.Infrastructure;
+using NT.IdentityServer.Models.ManageViewModels;
+using NT.IdentityServer.Quickstart;
+using NT.IdentityServer.Services;
 
-namespace BlogCore.IdentityServer.Controllers
+namespace NT.IdentityServer.Controllers
 {
     [Authorize]
     [SecurityHeaders]

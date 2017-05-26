@@ -4,12 +4,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using NT.Core.UserContext;
 
 namespace NT.Infrastructure
 {
-    public class AppDbContext : IdentityDbContext<User>
+    public class AppDbContext : DbContext // : IdentityDbContext<User>
     {
         public AppDbContext(DbContextOptions<AppDbContext> options)
             : base(options)
