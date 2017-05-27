@@ -17,6 +17,7 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="1.1.2" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="1.1.2" />
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="1.1.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="1.1.2" />
   </ItemGroup>
 
   <ItemGroup>
@@ -24,9 +25,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\NT.Core\NT.Core.csproj" />
-    <ProjectReference Include="..\NT.Infrastructure.EntityFrameworkCore\NT.Infrastructure.EntityFrameworkCore.csproj" />
-    <ProjectReference Include="..\NT.Infrastructure\NT.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\NT.Core\NT.Core.csproj" />
+    <ProjectReference Include="..\NT.CatalogService.Core\NT.CatalogService.Core.csproj" />
+    <ProjectReference Include="..\NT.CatalogService.Infrastructure\NT.CatalogService.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\NT.Infrastructure\NT.Infrastructure.csproj" />
   </ItemGroup>
-
+    
 </Project>

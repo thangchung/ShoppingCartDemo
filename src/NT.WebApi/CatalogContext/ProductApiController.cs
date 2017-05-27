@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using NT.CatalogService.Core;
-using NT.Infrastructure;
+using NT.Infrastructure.AspNetCore;
 
 namespace NT.WebApi.CatalogContext
 {

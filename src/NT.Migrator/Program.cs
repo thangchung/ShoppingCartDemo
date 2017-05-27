@@ -7,7 +7,7 @@ using Autofac.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using NT.Infrastructure;
+using NT.Infrastructure.EntityFrameworkCore;
 
 namespace NT.Migrator
 {

@@ -3,13 +3,13 @@ using System.Reflection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.Configuration;
-using NT.Infrastructure.EntityFrameworkCore;
 
-namespace NT.Migrator
+namespace NT.Infrastructure.EntityFrameworkCore
 {
-    public class AppDbContextFactory : IDbContextFactory<AppDbContext>
+    public static class DbContextFactoryOptionsExtensions
     {
-        public AppDbContext Create(DbContextFactoryOptions options)
+        public static DbContextOptionsBuilder<TDbContext> BuildDbContext<TDbContext>(this DbContextFactoryOptions options, Assembly migrateAssembly)
+            where TDbContext : DbContext
         {
             var builder = new ConfigurationBuilder()
                 .SetBasePath(options.ContentRootPath)
@@ -26,11 +26,10 @@ namespace NT.Migrator
             if (string.IsNullOrEmpty(connstr))
                 throw new InvalidOperationException($"{nameof(connstr)} is null or empty.");
 
-            var migrationsAssembly = typeof(AppDbContextFactory).GetTypeInfo().Assembly.GetName().Name;
-            var optionsBuilder = new DbContextOptionsBuilder<AppDbContext>();
+            var migrationsAssembly = migrateAssembly.GetName().Name;
+            var optionsBuilder = new DbContextOptionsBuilder<TDbContext>();
             optionsBuilder.UseSqlServer(connstr, b => b.MigrationsAssembly(migrationsAssembly));
-
-            return new AppDbContext(optionsBuilder.Options);
+            return optionsBuilder;
         }
     }
 }

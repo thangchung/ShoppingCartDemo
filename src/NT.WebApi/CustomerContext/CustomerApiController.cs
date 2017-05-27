@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using NT.CustomerService.Core;
-using NT.Infrastructure;
+using NT.Infrastructure.AspNetCore;
 
 namespace NT.WebApi.CustomerContext
 {

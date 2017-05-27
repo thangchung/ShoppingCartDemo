@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using NT.CatalogService.Core;
 using NT.CustomerService.Core;
-using NT.Infrastructure;
+using NT.Infrastructure.AspNetCore;
 using NT.OrderService.Core;
 
 namespace NT.WebApi.OrderContext

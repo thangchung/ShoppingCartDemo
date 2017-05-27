@@ -15,7 +15,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		ShoppingCartDemoCodeMap.dgml = ShoppingCartDemoCodeMap.dgml
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NT.IdentityServer", "src\NT.IdentityServer\NT.IdentityServer.csproj", "{10FD5B48-FBAF-4C9F-A0FA-6D389EA909E8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NT.IdentityServer", "src\Services\NT.IdentityServer\NT.IdentityServer.csproj", "{10FD5B48-FBAF-4C9F-A0FA-6D389EA909E8}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{2006F265-C085-4F5D-8EFE-29B15B8C003B}"
 EndProject
@@ -23,45 +23,49 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NT.WebApi", "src\NT.WebApi\
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CustomerService", "CustomerService", "{15931FC3-5847-4CCD-864D-B3021ACBA493}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NT.CustomerService.Api", "src\NT.CustomerService.Api\NT.CustomerService.Api.csproj", "{5EB1E686-91BC-437B-A8A2-70B37CFDD030}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NT.CustomerService.Api", "src\Services\NT.CustomerService.Api\NT.CustomerService.Api.csproj", "{5EB1E686-91BC-437B-A8A2-70B37CFDD030}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NT.CustomerService.Migrator", "src\NT.CustomerService.Migrator\NT.CustomerService.Migrator.csproj", "{4B3DDD05-59A1-4909-99F5-BF9C9DE9E030}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NT.CustomerService.Migrator", "src\Services\NT.CustomerService.Migrator\NT.CustomerService.Migrator.csproj", "{4B3DDD05-59A1-4909-99F5-BF9C9DE9E030}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NT.CustomerService.Core", "src\NT.CustomerService.Core\NT.CustomerService.Core.csproj", "{D775D3AA-ADA4-48CD-AA89-BCC6538659C0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NT.CustomerService.Core", "src\Services\NT.CustomerService.Core\NT.CustomerService.Core.csproj", "{D775D3AA-ADA4-48CD-AA89-BCC6538659C0}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NT.CustomerService.Infrastructure", "src\NT.CustomerService.Infrastructure\NT.CustomerService.Infrastructure.csproj", "{8B7000C5-5047-4B88-A682-18AD88122FF8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NT.CustomerService.Infrastructure", "src\Services\NT.CustomerService.Infrastructure\NT.CustomerService.Infrastructure.csproj", "{8B7000C5-5047-4B88-A682-18AD88122FF8}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "OrderService", "OrderService", "{3B2DE55E-BD5F-41B6-9FF0-3ED29456EEEB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NT.OrderService.Api", "src\NT.OrderService.Api\NT.OrderService.Api.csproj", "{4011DE0B-E16D-4B35-9AD6-BC4F98DE8C5A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NT.OrderService.Api", "src\Services\NT.OrderService.Api\NT.OrderService.Api.csproj", "{4011DE0B-E16D-4B35-9AD6-BC4F98DE8C5A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NT.OrderService.Infrastructure", "src\NT.OrderService.Infrastructure\NT.OrderService.Infrastructure.csproj", "{C7C2B7C3-03B2-4B70-BEE6-394290DEF372}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NT.OrderService.Infrastructure", "src\Services\NT.OrderService.Infrastructure\NT.OrderService.Infrastructure.csproj", "{C7C2B7C3-03B2-4B70-BEE6-394290DEF372}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NT.OrderService.Core", "src\NT.OrderService.Core\NT.OrderService.Core.csproj", "{EC5DA055-56D5-4A8F-94D2-20249C556B81}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NT.OrderService.Core", "src\Services\NT.OrderService.Core\NT.OrderService.Core.csproj", "{EC5DA055-56D5-4A8F-94D2-20249C556B81}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NT.OrderService.Migrator", "src\NT.OrderService.Migrator\NT.OrderService.Migrator.csproj", "{0261D36B-125C-4CEB-A6CD-D1454AAAE458}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NT.OrderService.Migrator", "src\Services\NT.OrderService.Migrator\NT.OrderService.Migrator.csproj", "{0261D36B-125C-4CEB-A6CD-D1454AAAE458}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CatalogService", "CatalogService", "{60C4787C-2D2D-4544-B599-BF97F20BA609}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NT.CatalogService.Api", "src\NT.CatalogService.Api\NT.CatalogService.Api.csproj", "{0056EB3F-C44E-472B-8DF6-62067759EE9F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NT.CatalogService.Api", "src\Services\NT.CatalogService.Api\NT.CatalogService.Api.csproj", "{0056EB3F-C44E-472B-8DF6-62067759EE9F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NT.CatalogService.Migrator", "src\NT.CatalogService.Migrator\NT.CatalogService.Migrator.csproj", "{24D7203A-6A80-4C86-AD1D-1D50993F8C29}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NT.CatalogService.Migrator", "src\Services\NT.CatalogService.Migrator\NT.CatalogService.Migrator.csproj", "{24D7203A-6A80-4C86-AD1D-1D50993F8C29}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NT.CatalogService.Core", "src\NT.CatalogService.Core\NT.CatalogService.Core.csproj", "{4CC83BCD-A8AC-493E-808C-428C85E5C5B6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NT.CatalogService.Core", "src\Services\NT.CatalogService.Core\NT.CatalogService.Core.csproj", "{4CC83BCD-A8AC-493E-808C-428C85E5C5B6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NT.CatalogService.Infrastructure", "src\NT.CatalogService.Infrastructure\NT.CatalogService.Infrastructure.csproj", "{00458E19-D313-46B8-90A2-E7C669A9C6FF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NT.CatalogService.Infrastructure", "src\Services\NT.CatalogService.Infrastructure\NT.CatalogService.Infrastructure.csproj", "{00458E19-D313-46B8-90A2-E7C669A9C6FF}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SecurityService", "SecurityService", "{FDEB445B-ADED-43C7-A5F8-B31050CC1FA7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NT.IdentityServer.Migrator", "src\NT.IdentityServer.Migrator\NT.IdentityServer.Migrator.csproj", "{C510945A-97AB-4D7B-BA21-3FF7695CAAC6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NT.IdentityServer.Migrator", "src\Services\NT.IdentityServer.Migrator\NT.IdentityServer.Migrator.csproj", "{C510945A-97AB-4D7B-BA21-3FF7695CAAC6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NT.IdentityServer.Infrastructure", "src\NT.IdentityServer.Infrastructure\NT.IdentityServer.Infrastructure.csproj", "{30F56EA8-851F-40C5-A8AC-8F1AB64480E6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NT.IdentityServer.Infrastructure", "src\Services\NT.IdentityServer.Infrastructure\NT.IdentityServer.Infrastructure.csproj", "{30F56EA8-851F-40C5-A8AC-8F1AB64480E6}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NT.Migrator", "src\NT.Migrator\NT.Migrator.csproj", "{A5A480ED-5DCC-4D6F-8290-846AEEC53678}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NT.Infrastructure.MessageBus", "src\NT.Infrastructure.MessageBus\NT.Infrastructure.MessageBus.csproj", "{2E427938-5B2A-4159-B17A-127FE350E0D5}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NT.Infrastructure.MessageBus.RabbitMq", "src\NT.Infrastructure.MessageBus.RabbitMq\NT.Infrastructure.MessageBus.RabbitMq.csproj", "{F248C6AB-23EE-4B53-829A-CDEF9B5E86F7}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NT.Infrastructure.EntityFrameworkCore", "src\NT.Infrastructure.EntityFrameworkCore\NT.Infrastructure.EntityFrameworkCore.csproj", "{CED75CD3-5F1E-47A7-AD08-D892B419A33E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NT.Infrastructure.AspNetCore", "src\NT.Infrastructure.AspNetCore\NT.Infrastructure.AspNetCore.csproj", "{FE61D99D-CAFD-4F11-A757-EFDA59A84B2B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -153,6 +157,14 @@ Global
 		{F248C6AB-23EE-4B53-829A-CDEF9B5E86F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F248C6AB-23EE-4B53-829A-CDEF9B5E86F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F248C6AB-23EE-4B53-829A-CDEF9B5E86F7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CED75CD3-5F1E-47A7-AD08-D892B419A33E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CED75CD3-5F1E-47A7-AD08-D892B419A33E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CED75CD3-5F1E-47A7-AD08-D892B419A33E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CED75CD3-5F1E-47A7-AD08-D892B419A33E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FE61D99D-CAFD-4F11-A757-EFDA59A84B2B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FE61D99D-CAFD-4F11-A757-EFDA59A84B2B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FE61D99D-CAFD-4F11-A757-EFDA59A84B2B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FE61D99D-CAFD-4F11-A757-EFDA59A84B2B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
