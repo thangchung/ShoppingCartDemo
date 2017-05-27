@@ -32,15 +32,5 @@ namespace NT.WebApi.CustomerContext
         {
             return await RestClient.PostAsync<Customer>("customer_service", "/api/customers", customer);
         }
-
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }
     }
 }

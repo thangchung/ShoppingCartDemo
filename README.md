@@ -1,6 +1,6 @@
 ### Introduction
 
-The ShoppingCart project only for demo in training courses.
+The ShoppingCart project is only for the demo in training courses.
 
 ### Migrations
 
@@ -32,9 +32,13 @@ The ShoppingCart project only for demo in training courses.
 
 `dotnet run`
 
-### Login
+### Login infomartion
 
 `root@shoppingcart.com` / `root`
+
+### Process / Saga
+
+![Checkout Process](https://github.com/thangchung/ShoppingCartDemo/blob/master/docs/CheckoutProcess.png)
 
 ### Service Discovery (Windows only)
 

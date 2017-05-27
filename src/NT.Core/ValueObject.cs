@@ -46,6 +46,7 @@ namespace NT.Core
         private IEnumerable<PropertyInfo> GetProperties()
         {
             return _properties ?? (_properties = GetType()
+                       .GetTypeInfo()
                        .GetProperties(BindingFlags.Instance | BindingFlags.Public)
                        .Where(p => p.GetCustomAttribute(typeof(IgnoreMemberAttribute)) == null)
                        .ToList());
@@ -53,7 +54,7 @@ namespace NT.Core
 
         private IEnumerable<FieldInfo> GetFields()
         {
-            return _fields ?? (_fields = GetType().GetFields(BindingFlags.Instance | BindingFlags.Public)
+            return _fields ?? (_fields = GetType().GetTypeInfo().GetFields(BindingFlags.Instance | BindingFlags.Public)
                        .Where(p => p.GetCustomAttribute(typeof(IgnoreMemberAttribute)) == null)
                        .ToList());
         }
