@@ -2,7 +2,7 @@
 
 The ShoppingCart project only for demo in training courses.
 
-### Migration
+### Migrations
 
 - Sercurity Service
 
@@ -40,14 +40,21 @@ The ShoppingCart project only for demo in training courses.
 
 `consul.exe agent -dev`
 
+### RabbitMQ
+
+- Make sure installing the RabbitMQ for Windows at https://www.rabbitmq.com/install-windows.html
+- Enable the management UI at https://www.rabbitmq.com/management.html
+- Create the `root` / `root` user
+- Create the `shopping_cart` queue and `shopping_cart` vhost (assign the `root` user to this vhost)
+
 ### Services
 
-- Security Service: http://localhost:9999/.well-known/openid-configuration
 - API Gateway: http://localhost:8888/swagger
-- Discovery Service: http://localhost:8500
-
-![Discovery Service](https://github.com/thangchung/ShoppingCartDemo/blob/master/docs/ServiceDiscovery.png)
-
+- Security Service: http://localhost:9999/.well-known/openid-configuration
 - Customer Service: http://localhost:8801
 - Order Service: http://localhost:8802
 - Catalog Service: http://localhost:8803
+- RabbitMQ endpoint: http://localhost:15672 (`guest` / `guest`)
+- Discovery Service: http://localhost:8500
+
+![Discovery Service](https://github.com/thangchung/ShoppingCartDemo/blob/master/docs/ServiceDiscovery.png)

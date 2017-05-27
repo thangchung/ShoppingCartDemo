@@ -59,6 +59,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NT.IdentityServer.Infrastru
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NT.Migrator", "src\NT.Migrator\NT.Migrator.csproj", "{A5A480ED-5DCC-4D6F-8290-846AEEC53678}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NT.Infrastructure.MessageBus", "src\NT.Infrastructure.MessageBus\NT.Infrastructure.MessageBus.csproj", "{2E427938-5B2A-4159-B17A-127FE350E0D5}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NT.Infrastructure.MessageBus.RabbitMq", "src\NT.Infrastructure.MessageBus.RabbitMq\NT.Infrastructure.MessageBus.RabbitMq.csproj", "{F248C6AB-23EE-4B53-829A-CDEF9B5E86F7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -141,6 +145,14 @@ Global
 		{A5A480ED-5DCC-4D6F-8290-846AEEC53678}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A5A480ED-5DCC-4D6F-8290-846AEEC53678}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A5A480ED-5DCC-4D6F-8290-846AEEC53678}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2E427938-5B2A-4159-B17A-127FE350E0D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2E427938-5B2A-4159-B17A-127FE350E0D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2E427938-5B2A-4159-B17A-127FE350E0D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2E427938-5B2A-4159-B17A-127FE350E0D5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F248C6AB-23EE-4B53-829A-CDEF9B5E86F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F248C6AB-23EE-4B53-829A-CDEF9B5E86F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F248C6AB-23EE-4B53-829A-CDEF9B5E86F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F248C6AB-23EE-4B53-829A-CDEF9B5E86F7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

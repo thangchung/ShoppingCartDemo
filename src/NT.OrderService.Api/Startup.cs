@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Microphone.AspNet;
@@ -10,6 +11,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using NT.Core;
+using NT.Infrastructure.MessageBus;
+using NT.Infrastructure.MessageBus.Event;
+using NT.Infrastructure.MessageBus.RabbitMq;
 using NT.OrderService.Infrastructure;
 
 namespace NT.OrderService.Api
@@ -43,6 +47,21 @@ namespace NT.OrderService.Api
 
             builder.RegisterType<OrderRepository>()
                 .AsImplementedInterfaces();
+
+            // RabbitMq
+            builder.Register(x => new RabbitMqPublisher(Configuration.GetValue<string>("Rabbitmq"), "order.exchange"))
+                .As<IEventBus>()
+                .SingleInstance();
+
+            builder.RegisterInstance(new RabbitMqSubscriber(Configuration.GetValue<string>("Rabbitmq"), "order.exchange", "order.queue"))
+                .Named<IEventSubscriber>("EventSubscriber");
+
+            builder.Register(x =>
+                new EventConsumer(
+                    x.ResolveNamed<IEventSubscriber>("EventSubscriber"),
+                    (IEnumerable<IMessageHandler>)x.Resolve(typeof(IEnumerable<IMessageHandler>))
+                )
+            ).As<IEventConsumer>();
 
             // Add framework services.
             services.AddMvc();

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -15,6 +16,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using NT.Infrastructure;
+using NT.Infrastructure.MessageBus;
+using NT.Infrastructure.MessageBus.Event;
+using NT.Infrastructure.MessageBus.RabbitMq;
 using Swashbuckle.AspNetCore.Swagger;
 
 namespace NT.WebApi
@@ -84,8 +88,28 @@ namespace NT.WebApi
             builder.RegisterType<RestClient>()
                 .AsSelf();
 
+            // RabbitMq
+            builder.RegisterAssemblyTypes(typeof(Startup).GetTypeInfo().Assembly)
+                .AsImplementedInterfaces();
+
+            builder.Register(x => new RabbitMqPublisher(Configuration.GetValue<string>("Rabbitmq"), "order.exchange"))
+                .As<IEventBus>()
+                .SingleInstance();
+
+            builder.RegisterInstance(new RabbitMqSubscriber(Configuration.GetValue<string>("Rabbitmq"), "order.exchange", "order.queue"))
+                .Named<IEventSubscriber>("EventSubscriber");
+
+            builder.Register(x =>
+                new EventConsumer(
+                    x.ResolveNamed<IEventSubscriber>("EventSubscriber"),
+                    (IEnumerable<IMessageHandler>)x.Resolve(typeof(IEnumerable<IMessageHandler>))
+                )
+            ).As<IEventConsumer>();
+
             builder.Populate(services);
-            return builder.Build().Resolve<IServiceProvider>();
+            var serviceProvider = builder.Build().Resolve<IServiceProvider>();
+            serviceProvider.GetService<IEventConsumer>().Subscriber.Subscribe();
+            return serviceProvider;
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
