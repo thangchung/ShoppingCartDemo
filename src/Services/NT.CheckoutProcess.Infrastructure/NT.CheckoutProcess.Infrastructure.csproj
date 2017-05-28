@@ -5,11 +5,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Stateless" Version="3.1.0" />
     <PackageReference Include="System.Reactive" Version="3.1.1" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\NT.Core\NT.Core.csproj" />
+    <ProjectReference Include="..\..\NT.Infrastructure.AspNetCore\NT.Infrastructure.AspNetCore.csproj" />
     <ProjectReference Include="..\..\NT.Infrastructure.EntityFrameworkCore\NT.Infrastructure.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\..\NT.Infrastructure.MessageBus\NT.Infrastructure.MessageBus.csproj" />
     <ProjectReference Include="..\..\NT.Infrastructure\NT.Infrastructure.csproj" />

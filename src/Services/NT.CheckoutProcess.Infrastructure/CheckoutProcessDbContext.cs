@@ -17,7 +17,7 @@ namespace NT.CheckoutProcess.Infrastructure
         {
             var entityTypes = new List<Type>
             {
-                typeof(CheckoutData)
+                typeof(SagaInfo)
             };
 
             var valueTypes = new List<Type>();

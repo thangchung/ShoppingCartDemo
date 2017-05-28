@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Microphone.AspNet;
@@ -10,13 +11,14 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using NT.CheckoutProcess.Infrastructure;
 using NT.Core;
+using NT.Infrastructure.AspNetCore;
 using NT.Infrastructure.MessageBus;
 using NT.Infrastructure.MessageBus.Event;
 using NT.Infrastructure.MessageBus.RabbitMq;
-using NT.OrderService.Infrastructure;
 
-namespace NT.OrderService.Api
+namespace NT.CheckoutProcess.Api
 {
     public class Startup
     {
@@ -24,8 +26,8 @@ namespace NT.OrderService.Api
         {
             var builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
-                .AddJsonFile("appsettings.json", false, true)
-                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", true)
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
                 .AddEnvironmentVariables();
             Configuration = builder.Build();
         }
@@ -38,17 +40,23 @@ namespace NT.OrderService.Api
 
             services.AddMicrophone<ConsulProvider>();
 
-            services.AddDbContext<OrderDbContext>(options =>
+            services.AddDbContext<CheckoutProcessDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             // Core & Infra register
             builder.RegisterGeneric(typeof(GenericEfRepository<>))
                 .As(typeof(IRepository<>));
 
-            builder.RegisterType<OrderRepository>()
-                .AsImplementedInterfaces();
+            builder.RegisterType<RestClient>()
+                .AsSelf();
+
+            builder.RegisterType<CheckoutWorkflow>()
+                .AsSelf();
 
             // RabbitMq
+            builder.RegisterAssemblyTypes(typeof(Startup).GetTypeInfo().Assembly)
+                .AsImplementedInterfaces();
+
             builder.Register(x => new RabbitMqPublisher(Configuration.GetValue<string>("Rabbitmq"), "order.exchange"))
                 .As<IEventBus>()
                 .SingleInstance();
@@ -67,7 +75,9 @@ namespace NT.OrderService.Api
             services.AddMvc();
 
             builder.Populate(services);
-            return builder.Build().Resolve<IServiceProvider>();
+            var serviceProvider = builder.Build().Resolve<IServiceProvider>();
+            serviceProvider.GetService<IEventConsumer>().Subscriber.Subscribe();
+            return serviceProvider;
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
@@ -76,7 +86,7 @@ namespace NT.OrderService.Api
             loggerFactory.AddDebug();
 
             app.UseMvc();
-            app.UseMicrophone("order_service", "1.0");
+            app.UseMicrophone("checkout_service", "1.0");
         }
     }
 }

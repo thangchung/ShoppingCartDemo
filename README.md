@@ -32,13 +32,15 @@ The ShoppingCart project is only for the demo in training courses.
 
 `dotnet run`
 
+- Checkout Process Host
+
+`dotnet ef migrations add InitDatabase -c CheckoutProcessDbContext`
+
+`dotnet run`
+
 ### Login infomartion
 
 `root@shoppingcart.com` / `root`
-
-### Process / Saga
-
-![Checkout Process](https://github.com/thangchung/ShoppingCartDemo/blob/master/docs/CheckoutProcess.png)
 
 ### Service Discovery (Windows only)
 
@@ -58,7 +60,12 @@ The ShoppingCart project is only for the demo in training courses.
 - Customer Service: http://localhost:8801
 - Order Service: http://localhost:8802
 - Catalog Service: http://localhost:8803
+- Checkout Service: http://localhost:8804
 - RabbitMQ endpoint: http://localhost:15672 (`guest` / `guest`)
 - Discovery Service: http://localhost:8500
 
 ![Discovery Service](https://github.com/thangchung/ShoppingCartDemo/blob/master/docs/ServiceDiscovery.png)
+
+### Process / Saga
+
+![Checkout Process](https://github.com/thangchung/ShoppingCartDemo/blob/master/docs/CheckoutProcess.png)
