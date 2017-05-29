@@ -4,11 +4,12 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using NT.OrderService.Infrastructure;
+using NT.OrderService.Core;
 
 namespace NT.OrderService.Migrator.Migrations
 {
     [DbContext(typeof(OrderDbContext))]
-    [Migration("20170525034533_InitDatabase")]
+    [Migration("20170529040111_InitDatabase")]
     partial class InitDatabase
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -47,6 +48,8 @@ namespace NT.OrderService.Migrator.Migrations
                     b.Property<Guid>("EmployeeId");
 
                     b.Property<DateTime>("OrderDate");
+
+                    b.Property<int>("OrderStatus");
 
                     b.Property<Guid?>("ShipInfoId");
 

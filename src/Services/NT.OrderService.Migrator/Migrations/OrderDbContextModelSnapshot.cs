@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using NT.OrderService.Infrastructure;
+using NT.OrderService.Core;
 
 namespace NT.OrderService.Migrator.Migrations
 {
@@ -46,6 +47,8 @@ namespace NT.OrderService.Migrator.Migrations
                     b.Property<Guid>("EmployeeId");
 
                     b.Property<DateTime>("OrderDate");
+
+                    b.Property<int>("OrderStatus");
 
                     b.Property<Guid?>("ShipInfoId");
 

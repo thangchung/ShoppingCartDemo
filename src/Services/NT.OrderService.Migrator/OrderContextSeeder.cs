@@ -17,6 +17,7 @@ namespace NT.OrderService.Migrator
                 CustomerId = new Guid("37EB08EF-E4C2-4211-B808-F64A81AE02FC"),
                 EmployeeId = new Guid("d3b13f7e-8978-4364-96dd-978878de9fce"),
                 OrderDate = DateTimeOffset.Now.UtcDateTime,
+                OrderStatus = OrderStatus.New,
                 ShipInfo = new ShipInfo(Guid.NewGuid(), "Ship Info 1", new AddressInfo(Guid.NewGuid(), "123 Address", "Hanoi", "Hoan Kiem district", "7000", "Vietnam")),
                 OrderDetails = new List<OrderDetail>
                 {

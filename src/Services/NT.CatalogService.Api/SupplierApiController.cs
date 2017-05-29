@@ -8,11 +8,11 @@ using NT.Core;
 namespace NT.CatalogService.Api
 {
     [Route("api/suppliers")]
-    public class SupplierQueryController : Controller
+    public class SupplierApiController : Controller
     {
         private readonly IRepository<Supplier> _genericSupplierRepository;
 
-        public SupplierQueryController(IRepository<Supplier> genericSupplierRepository)
+        public SupplierApiController(IRepository<Supplier> genericSupplierRepository)
         {
             _genericSupplierRepository = genericSupplierRepository;
         }

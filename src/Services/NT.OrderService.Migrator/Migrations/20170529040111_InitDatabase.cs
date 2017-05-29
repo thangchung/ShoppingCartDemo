@@ -61,6 +61,7 @@ namespace NT.OrderService.Migrator.Migrations
                     CustomerId = table.Column<Guid>(nullable: false),
                     EmployeeId = table.Column<Guid>(nullable: false),
                     OrderDate = table.Column<DateTime>(nullable: false),
+                    OrderStatus = table.Column<int>(nullable: false),
                     ShipInfoId = table.Column<Guid>(nullable: true)
                 },
                 constraints: table =>
