@@ -9,7 +9,7 @@ using NT.OrderService.Core;
 namespace NT.OrderService.Migrator.Migrations
 {
     [DbContext(typeof(OrderDbContext))]
-    [Migration("20170529040111_InitDatabase")]
+    [Migration("20170530143104_InitDatabase")]
     partial class InitDatabase
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -50,6 +50,8 @@ namespace NT.OrderService.Migrator.Migrations
                     b.Property<DateTime>("OrderDate");
 
                     b.Property<int>("OrderStatus");
+
+                    b.Property<Guid?>("SagaId");
 
                     b.Property<Guid?>("ShipInfoId");
 

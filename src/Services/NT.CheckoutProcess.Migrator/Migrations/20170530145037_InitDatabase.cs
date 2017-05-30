@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace NT.CheckoutProcess.Host.Migrations
+namespace NT.CheckoutProcess.Migrator.Migrations
 {
     public partial class InitDatabase : Migration
     {
@@ -17,7 +17,8 @@ namespace NT.CheckoutProcess.Host.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    Data = table.Column<string>(nullable: true)
+                    Data = table.Column<string>(nullable: true),
+                    SagaStatus = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {

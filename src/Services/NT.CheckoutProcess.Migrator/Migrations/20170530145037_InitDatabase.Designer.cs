@@ -5,10 +5,10 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using NT.CheckoutProcess.Infrastructure;
 
-namespace NT.CheckoutProcess.Host.Migrations
+namespace NT.CheckoutProcess.Migrator.Migrations
 {
     [DbContext(typeof(CheckoutProcessDbContext))]
-    [Migration("20170528142327_InitDatabase")]
+    [Migration("20170530145037_InitDatabase")]
     partial class InitDatabase
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -23,6 +23,8 @@ namespace NT.CheckoutProcess.Host.Migrations
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("Data");
+
+                    b.Property<int>("SagaStatus");
 
                     b.HasKey("Id");
 

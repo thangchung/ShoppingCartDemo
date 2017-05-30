@@ -7,11 +7,11 @@ using NT.Infrastructure.MessageBus.Event;
 
 namespace NT.CheckoutProcess.Api
 {
-    public class CheckoutHandler : IEventBusHandler<CheckoutEvent>
+    public class CheckoutHandler : IEventBusHandler<CheckoutEvent>, IEventBusHandler<PaymentAcceptedEvent>
     {
-        private readonly CheckoutWorkflow _workflow;
+        private readonly CheckoutSaga _workflow;
 
-        public CheckoutHandler(CheckoutWorkflow workflow)
+        public CheckoutHandler(CheckoutSaga workflow)
         {
             _workflow = workflow;
         }
@@ -19,6 +19,12 @@ namespace NT.CheckoutProcess.Api
         public IObservable<Unit> Handle(CheckoutEvent message)
         {
             _workflow.Checkout(Guid.NewGuid(), message.OrderId).Wait();
+            return Observable.Return(new Unit());
+        }
+
+        public IObservable<Unit> Handle(PaymentAcceptedEvent message)
+        {
+            _workflow.PaymentAccepted(message.SagaId).Wait();
             return Observable.Return(new Unit());
         }
     }

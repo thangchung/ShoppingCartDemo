@@ -11,7 +11,6 @@ namespace NT.CheckoutProcess.Core
         public Guid CustomerId { get; set; }
         public Guid EmployeeId { get; set; }
         public DateTime OrderDate { get; set; }
-        public int SagaStatus { get; set; } = 0; // Checkout
     }
 
     public class ProductInfo

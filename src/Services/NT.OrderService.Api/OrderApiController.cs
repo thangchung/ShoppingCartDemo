@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using NT.Core;
+using NT.Core.Results;
 using NT.OrderService.Core;
 
 namespace NT.OrderService.Api
@@ -41,6 +42,18 @@ namespace NT.OrderService.Api
                 return await Task.FromResult(new SagaResult { Succeed = false });
 
             order.OrderStatus = status;
+            await _genericOrderRepository.UpdateAsync(order);
+            return await Task.FromResult(new SagaResult { Succeed = true });
+        }
+
+        [HttpPut("{orderId}/update-saga/{sagaId}")]
+        public async Task<SagaResult> UpdateSagaInfo(Guid orderId, Guid sagaId)
+        {
+            var order = await _genericOrderRepository.GetByIdAsync(orderId);
+            if (order == null)
+                return await Task.FromResult(new SagaResult { Succeed = false });
+
+            order.SagaId = sagaId;
             await _genericOrderRepository.UpdateAsync(order);
             return await Task.FromResult(new SagaResult { Succeed = true });
         }

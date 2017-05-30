@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NT.CheckoutProcess.Core;
 using NT.Core;
+using NT.Core.Results;
 using NT.Infrastructure;
 using NT.Infrastructure.AspNetCore;
 using NT.OrderService.Core;
@@ -11,7 +12,10 @@ using Stateless;
 
 namespace NT.CheckoutProcess.Infrastructure
 {
-    public class CheckoutWorkflow
+    /// <summary>
+    /// TODO: Need to have an ActivityAudit Service so that we can track the activity in UI
+    /// </summary>
+    public class CheckoutSaga
     {
         public enum State
         {
@@ -19,6 +23,7 @@ namespace NT.CheckoutProcess.Infrastructure
             OrderStatus,
             ProductQuantity,
             Payment,
+            WaitingPayment,
             Completed
         }
 
@@ -32,6 +37,7 @@ namespace NT.CheckoutProcess.Infrastructure
             UpdateProductQuantitySucceed,
             UpdateProductQuantityFailed,
             MakePayment,
+            WaitingPayment,
             MakePaymentSucceed,
             MakePaymentFailed,
             ChangeCompletedStatus
@@ -42,6 +48,7 @@ namespace NT.CheckoutProcess.Infrastructure
         private readonly StateMachine<State, Trigger>.TriggerWithParameters<Guid> _completedTrigger;
         private readonly StateMachine<State, Trigger>.TriggerWithParameters<Guid> _orderStatusTrigger;
         private readonly StateMachine<State, Trigger>.TriggerWithParameters<Guid> _paymentTrigger;
+        private readonly StateMachine<State, Trigger>.TriggerWithParameters<Guid> _waitingPaymentTrigger;
         private readonly StateMachine<State, Trigger>.TriggerWithParameters<Guid> _productQuantityTrigger;
 
         private readonly IRepository<SagaInfo> _repository;
@@ -51,19 +58,20 @@ namespace NT.CheckoutProcess.Infrastructure
         private State _state = State.Checkout;
         private readonly ILogger _logger;
 
-        public CheckoutWorkflow(
+        public CheckoutSaga(
             IRepository<SagaInfo> repository,
             RestClient restClient)
         {
             _repository = repository;
             _restClient = restClient;
-            _logger = LogFactory.GetLogInstance<CheckoutWorkflow>();
+            _logger = LogFactory.GetLogInstance<CheckoutSaga>();
 
             _machine = new StateMachine<State, Trigger>(() => _state, s => _state = s);
             _checkoutTrigger = _machine.SetTriggerParameters<Guid>(Trigger.Checkout);
             _orderStatusTrigger = _machine.SetTriggerParameters<Guid>(Trigger.UpdateOrderStatus);
             _productQuantityTrigger = _machine.SetTriggerParameters<Guid>(Trigger.UpdateProductQuantity);
             _paymentTrigger = _machine.SetTriggerParameters<Guid>(Trigger.MakePayment);
+            _waitingPaymentTrigger = _machine.SetTriggerParameters<Guid>(Trigger.WaitingPayment);
             _completedTrigger = _machine.SetTriggerParameters<Guid>(Trigger.ChangeCompletedStatus);
 
             _machine.Configure(State.Checkout)
@@ -88,7 +96,10 @@ namespace NT.CheckoutProcess.Infrastructure
                 .Permit(Trigger.ChangeCompletedStatus, State.Completed);
 
             _machine.Configure(State.Payment)
-                .OnEntryFromAsync(_paymentTrigger, (id, t) => OnMakePayment(id))
+                .OnEntryFromAsync(_paymentTrigger, (correlationId, t) => OnMakePayment(correlationId));
+
+            _machine.Configure(State.WaitingPayment)
+                .OnEntryFromAsync(_waitingPaymentTrigger, (correlationId, t) => OnPaymentReceived(correlationId))
                 .InternalTransitionAsync(Trigger.MakePaymentSucceed, t => OnPaymentSucceed(_correlationId))
                 .InternalTransitionAsync(Trigger.MakePaymentFailed, t => OnPaymentFailed(_correlationId))
                 .Permit(Trigger.ChangeCompletedStatus, State.Completed)
@@ -98,16 +109,27 @@ namespace NT.CheckoutProcess.Infrastructure
                     await OnNotifyEmployee(_internalData.EmployeeId);
                 });
 
+
             _machine.Configure(State.Completed)
-                .OnEntryFromAsync(_completedTrigger, (id, t) => OnCompletedProcess(id));
+                .OnEntryFromAsync(_completedTrigger, (correlationId, t) => OnCompletedProcess(correlationId));
         }
 
         public async Task Checkout(Guid correlationId, Guid orderId)
         {
-            _internalData = await LoadFromStorage(correlationId, orderId);
-            _state = (State) _internalData.SagaStatus;
+            var result = await LoadFromStorage(correlationId, orderId);
+            _state = (State)result.Item1.SagaStatus;
+            _internalData = result.Item2;
             _correlationId = correlationId;
             await _machine.FireAsync(_checkoutTrigger, correlationId);
+        }
+
+        public async Task PaymentAccepted(Guid correlationId)
+        {
+            var result =  await LoadFromStorage(correlationId);
+            _state = (State)result.Item1.SagaStatus;
+            _internalData = result.Item2;
+            _correlationId = correlationId;
+            await _machine.FireAsync(_waitingPaymentTrigger, correlationId);
         }
 
         private async Task OnCheckout(Guid correlationId)
@@ -162,9 +184,25 @@ namespace NT.CheckoutProcess.Infrastructure
 
         private async Task OnMakePayment(Guid correlationId)
         {
-            // TODO: do a payment
-            // TODO: 1. calculate money based on the price in Product 
+            var money = 0.0D;
+            foreach (var productInOrder in _internalData.Products)
+            {
+                money += await GetProductPrice(productInOrder.ProductId) * productInOrder.Quantity;
+            }
+
+            // Submit request to order service to update WaitingPayment status, and correlationId to SagaID column
+            await UpdateOrderStatus(_internalData.OrderId, OrderStatus.WaitingPayment);
+            await UpdateSagaInfo(_internalData.OrderId, correlationId);
+
             // TODO: 2. Submit request to payment service
+            // TODO: ...
+
+            // update storage for next time processing
+            await UpdateStorage(correlationId, (int)State.WaitingPayment, _internalData);
+        }
+
+        private async Task OnPaymentReceived(Guid correlationId)
+        {
             await _machine.FireAsync(Trigger.MakePaymentSucceed);
         }
 
@@ -198,11 +236,10 @@ namespace NT.CheckoutProcess.Infrastructure
 
         private async Task OnCompletedProcess(Guid correlationId)
         {
-            _internalData.SagaStatus = (int) State.Completed;
-            await UpdateStorage(correlationId, _internalData);
+            await UpdateStorage(correlationId, (int)State.Completed, _internalData);
         }
 
-        private async Task<CheckoutInfo> LoadFromStorage(Guid correlationId, Guid? orderId = null)
+        private async Task<Tuple<SagaInfo, CheckoutInfo>> LoadFromStorage(Guid correlationId, Guid? orderId = null)
         {
             var sagaInfo = await _repository.GetByIdAsync(correlationId);
             CheckoutInfo internalData;
@@ -233,24 +270,45 @@ namespace NT.CheckoutProcess.Infrastructure
                     Id = correlationId, // correlation id
                     Data = internalData.ToString<CheckoutInfo>()
                 };
-                await _repository.AddAsync(saga);
+                sagaInfo = await _repository.AddAsync(saga);
             }
-            return internalData;
+            return new Tuple<SagaInfo, CheckoutInfo>(sagaInfo, internalData);
         }
 
-        private async Task UpdateStorage(Guid correlationId, CheckoutInfo checkoutInfo)
+        private async Task UpdateStorage(Guid correlationId, int sagaStatus, CheckoutInfo checkoutInfo)
         {
             var updateSagaInfo = await _repository.GetByIdAsync(correlationId);
             updateSagaInfo.Data = checkoutInfo.ToString<CheckoutInfo>();
+            updateSagaInfo.SagaStatus = sagaStatus;
             await _repository.UpdateAsync(updateSagaInfo);
         }
 
         private async Task<bool> UpdateOrderStatus(Guid orderId, OrderStatus status)
         {
+            // TODO: Store OrderStatus into SagaInfo
+            // TODO: ...
+
             var result = await _restClient.PutAsync<SagaResult>(
                 "order_service",
                 $"/api/orders/{orderId}/status/{status}");
             return result.Succeed;
+        }
+
+        private async Task<bool> UpdateSagaInfo(Guid orderId, Guid correlationId)
+        {
+            var result = await _restClient.PutAsync<SagaResult>(
+                "order_service",
+                $"/api/orders/{orderId}/update-saga/{correlationId}");
+            return result.Succeed;
+        }
+
+        private async Task<double> GetProductPrice(Guid productId)
+        {
+            // TODO: need to return SagaResult (wrap the price in)
+            var result = await _restClient.GetAsync<SagaDoubleResult>(
+                "catalog_service",
+                $"/api/products/{productId}/price");
+            return result.Price;
         }
 
         private async Task<bool> DescreaseQuantityOfProductInCatalog(Guid productId, int quantityInOrder)

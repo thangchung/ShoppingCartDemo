@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using NT.CheckoutProcess.Infrastructure;
 
-namespace NT.CheckoutProcess.Host.Migrations
+namespace NT.CheckoutProcess.Migrator.Migrations
 {
     [DbContext(typeof(CheckoutProcessDbContext))]
     partial class CheckoutProcessDbContextModelSnapshot : ModelSnapshot
@@ -22,6 +22,8 @@ namespace NT.CheckoutProcess.Host.Migrations
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("Data");
+
+                    b.Property<int>("SagaStatus");
 
                     b.HasKey("Id");
 

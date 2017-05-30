@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using NT.CatalogService.Core;
 using NT.Core;
+using NT.Core.Results;
 
 namespace NT.CatalogService.Api
 {
@@ -20,6 +21,15 @@ namespace NT.CatalogService.Api
         public async Task<Product> Get(Guid id)
         {
             return await _genericProductRepository.GetByIdAsync(id);
+        }
+
+        [HttpGet("{productId}/price")]
+        public async Task<SagaDoubleResult> GetPrice(Guid productId)
+        {
+            var product = await _genericProductRepository.GetByIdAsync(productId);
+            if (product == null)
+                return await Task.FromResult(new SagaDoubleResult { Succeed = false });
+            return await Task.FromResult(new SagaDoubleResult { Succeed = true, Price = product.Price });
         }
 
         [HttpPut("{productId}/increase-quantity/{quantityInOrder}")]

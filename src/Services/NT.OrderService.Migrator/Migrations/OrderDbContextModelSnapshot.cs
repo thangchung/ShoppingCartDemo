@@ -50,6 +50,8 @@ namespace NT.OrderService.Migrator.Migrations
 
                     b.Property<int>("OrderStatus");
 
+                    b.Property<Guid?>("SagaId");
+
                     b.Property<Guid?>("ShipInfoId");
 
                     b.HasKey("Id");

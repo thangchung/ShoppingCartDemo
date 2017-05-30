@@ -8,6 +8,7 @@ namespace NT.OrderService.Core
     {
         New,
         Processing,
+        WaitingPayment,
         Paid
     }
 
@@ -17,6 +18,7 @@ namespace NT.OrderService.Core
         public Guid EmployeeId { get; set; }
         public DateTime OrderDate { get; set; }
         public OrderStatus OrderStatus { get; set; }
+        public Guid? SagaId { get; set; }
         public virtual ShipInfo ShipInfo { get; set; }
         public virtual List<OrderDetail> OrderDetails { get; set; }
     }

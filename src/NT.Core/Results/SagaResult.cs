@@ -1,4 +1,4 @@
-﻿namespace NT.Core
+﻿namespace NT.Core.Results
 {
     public class SagaResult
     {

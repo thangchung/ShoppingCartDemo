@@ -50,7 +50,7 @@ namespace NT.CheckoutProcess.Api
             builder.RegisterType<RestClient>()
                 .AsSelf();
 
-            builder.RegisterType<CheckoutWorkflow>()
+            builder.RegisterType<CheckoutSaga>()
                 .AsSelf();
 
             // RabbitMq

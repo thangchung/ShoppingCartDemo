@@ -4,47 +4,69 @@ The ShoppingCart project is only for the demo in training courses.
 
 ### Migrations
 
-- Sercurity Service
+- Security Service
 
-`dotnet ef migrations add InitialIdentityServerPersistedGrantDbMigration -c PersistedGrantDbContext -o Migrations/PersistedGrantDb`
+```
+dotnet ef migrations add InitialIdentityServerPersistedGrantDbMigration -c PersistedGrantDbContext -o Migrations/PersistedGrantDb
+```
 
-`dotnet ef migrations add InitialIdentityServerConfigurationDbMigration -c ConfigurationDbContext -o Migrations/ConfigurationDb`
+```
+dotnet ef migrations add InitialIdentityServerConfigurationDbMigration -c ConfigurationDbContext -o Migrations/ConfigurationDb
+```
 
-`dotnet ef migrations add InitDatabase -c IdentityServerDbContext -o Migrations/IdentityDb`
+```
+dotnet ef migrations add InitDatabase -c IdentityServerDbContext -o Migrations/IdentityDb
+```
 
-`dotnet run`
+```
+dotnet run
+```
 
 - Customer Service
 
-`dotnet ef migrations add InitDatabase -c CustomerDbContext`
+```
+dotnet ef migrations add InitDatabase -c CustomerDbContext
+```
 
-`dotnet run`
+```
+dotnet run
+```
 
 - Order Service
 
-`dotnet ef migrations add InitDatabase -c OrderDbContext`
+```
+dotnet ef migrations add InitDatabase -c OrderDbContext
+```
 
-`dotnet run`
+```
+dotnet run
+```
 
 - Catalog Service
 
-`dotnet ef migrations add InitDatabase -c CatalogDbContext`
+```
+dotnet ef migrations add InitDatabase -c CatalogDbContext
+```
 
-`dotnet run`
+```
+dotnet run
+```
 
 - Checkout Process Host
 
-`dotnet ef migrations add InitDatabase -c CheckoutProcessDbContext`
+```
+dotnet ef migrations add InitDatabase -c CheckoutProcessDbContext
+```
 
-`dotnet run`
-
-### Login infomartion
-
-`root@shoppingcart.com` / `root`
+```
+dotnet run
+```
 
 ### Service Discovery (Windows only)
 
-`consul.exe agent -dev`
+```
+consul.exe agent -dev
+```
 
 ### RabbitMQ
 
@@ -55,17 +77,17 @@ The ShoppingCart project is only for the demo in training courses.
 
 ### Services
 
-- API Gateway: http://localhost:8888/swagger
-- Security Service: http://localhost:9999/.well-known/openid-configuration
+- API Gateway (core): http://localhost:8888/swagger
+- Security Service (core): http://localhost:9999/.well-known/openid-configuration (`root@shoppingcart.com` / `root`)
 - Customer Service: http://localhost:8801
 - Order Service: http://localhost:8802
 - Catalog Service: http://localhost:8803
 - Checkout Service: http://localhost:8804
-- RabbitMQ endpoint: http://localhost:15672 (`guest` / `guest`)
-- Discovery Service: http://localhost:8500
+- RabbitMQ endpoint (core): http://localhost:15672 (`guest` / `guest`)
+- Discovery Service (core): http://localhost:8500
 
 ![Discovery Service](https://github.com/thangchung/ShoppingCartDemo/blob/master/docs/ServiceDiscovery.png)
 
-### Process / Saga
+### Saga flow
 
-![Checkout Process](https://github.com/thangchung/ShoppingCartDemo/blob/master/docs/CheckoutProcess.png)
+![Checkout flow](https://github.com/thangchung/ShoppingCartDemo/blob/master/docs/CheckoutProcess.png)

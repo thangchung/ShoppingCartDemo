@@ -30,7 +30,7 @@ namespace NT.OrderService.Infrastructure
                 .Include(x => x.OrderDetails)
                 .Include(x => x.ShipInfo)
                 .Include(x => x.ShipInfo.AddressInfo)
-                .SingleOrDefaultAsync();
+                .SingleOrDefaultAsync(x=>x.Id == id);
         }
     }
 }
