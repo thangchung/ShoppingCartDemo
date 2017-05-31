@@ -9,10 +9,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using NT.AuditService.Infrastructure;
 using NT.Core;
-using NT.CatalogService.Infrastructure;
 
-namespace NT.CatalogService.Api
+namespace NT.AuditService.Api
 {
     public class Startup
     {
@@ -20,8 +20,8 @@ namespace NT.CatalogService.Api
         {
             var builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
+                .AddJsonFile("appsettings.json", false, true)
+                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", true)
                 .AddEnvironmentVariables();
             Configuration = builder.Build();
         }
@@ -34,7 +34,7 @@ namespace NT.CatalogService.Api
 
             services.AddMicrophone<ConsulProvider>();
 
-            services.AddDbContext<CatalogDbContext>(options =>
+            services.AddDbContext<AuditDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             // Core & Infra register
@@ -54,7 +54,7 @@ namespace NT.CatalogService.Api
             loggerFactory.AddDebug();
 
             app.UseMvc();
-            app.UseMicrophone("catalog_service", "1.0");
+            app.UseMicrophone("audit_service", "1.0");
         }
     }
 }

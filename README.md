@@ -72,6 +72,16 @@ dotnet ef migrations add InitDatabase -c PaymentDbContext
 dotnet run
 ```
 
+- Audit Service
+
+```
+dotnet ef migrations add InitDatabase -c AuditDbContext
+```
+
+```
+dotnet run
+```
+
 ### Service Discovery (Windows only)
 
 ```
@@ -92,6 +102,7 @@ consul.exe agent -dev
 - Catalog Service: http://localhost:8803
 - Checkout Service: http://localhost:8804
 - Payment Service: http://localhost:8805
+- Audit Service (core): http://localhost:8806
 - API Gateway (core): http://localhost:8888/swagger
 - Security Service (core): http://localhost:9999/.well-known/openid-configuration (`root@shoppingcart.com` / `root`)
 - RabbitMQ endpoint (core): http://localhost:15672 (`guest` / `guest`)
