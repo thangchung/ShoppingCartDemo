@@ -1,4 +1,6 @@
-﻿namespace NT.Core.PaymentContext
+﻿using NT.Core;
+
+namespace NT.PaymentService.Core
 {
     public class PaymentMethod : EntityBase
     {

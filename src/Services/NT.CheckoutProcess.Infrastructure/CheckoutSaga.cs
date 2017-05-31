@@ -8,6 +8,7 @@ using NT.Core.Results;
 using NT.Infrastructure;
 using NT.Infrastructure.AspNetCore;
 using NT.OrderService.Core;
+using NT.PaymentService.Core;
 using Stateless;
 
 namespace NT.CheckoutProcess.Infrastructure
@@ -23,7 +24,7 @@ namespace NT.CheckoutProcess.Infrastructure
             OrderStatus,
             ProductQuantity,
             Payment,
-            WaitingPayment,
+            PaymentReceived,
             Completed
         }
 
@@ -37,7 +38,7 @@ namespace NT.CheckoutProcess.Infrastructure
             UpdateProductQuantitySucceed,
             UpdateProductQuantityFailed,
             MakePayment,
-            WaitingPayment,
+            PaymentReceived,
             MakePaymentSucceed,
             MakePaymentFailed,
             ChangeCompletedStatus
@@ -49,6 +50,7 @@ namespace NT.CheckoutProcess.Infrastructure
         private readonly StateMachine<State, Trigger>.TriggerWithParameters<Guid> _orderStatusTrigger;
         private readonly StateMachine<State, Trigger>.TriggerWithParameters<Guid> _paymentTrigger;
         private readonly StateMachine<State, Trigger>.TriggerWithParameters<Guid> _waitingPaymentTrigger;
+        private readonly StateMachine<State, Trigger>.TriggerWithParameters<Guid> _receivedPaymentTrigger;
         private readonly StateMachine<State, Trigger>.TriggerWithParameters<Guid> _productQuantityTrigger;
 
         private readonly IRepository<SagaInfo> _repository;
@@ -71,7 +73,7 @@ namespace NT.CheckoutProcess.Infrastructure
             _orderStatusTrigger = _machine.SetTriggerParameters<Guid>(Trigger.UpdateOrderStatus);
             _productQuantityTrigger = _machine.SetTriggerParameters<Guid>(Trigger.UpdateProductQuantity);
             _paymentTrigger = _machine.SetTriggerParameters<Guid>(Trigger.MakePayment);
-            _waitingPaymentTrigger = _machine.SetTriggerParameters<Guid>(Trigger.WaitingPayment);
+            _receivedPaymentTrigger = _machine.SetTriggerParameters<Guid>(Trigger.PaymentReceived);
             _completedTrigger = _machine.SetTriggerParameters<Guid>(Trigger.ChangeCompletedStatus);
 
             _machine.Configure(State.Checkout)
@@ -96,19 +98,15 @@ namespace NT.CheckoutProcess.Infrastructure
                 .Permit(Trigger.ChangeCompletedStatus, State.Completed);
 
             _machine.Configure(State.Payment)
-                .OnEntryFromAsync(_paymentTrigger, (correlationId, t) => OnMakePayment(correlationId));
+                .OnEntryFromAsync(_paymentTrigger, (correlationId, t) => OnMakePayment(correlationId))
+                .Permit(Trigger.PaymentReceived, State.PaymentReceived);
 
-            _machine.Configure(State.WaitingPayment)
-                .OnEntryFromAsync(_waitingPaymentTrigger, (correlationId, t) => OnPaymentReceived(correlationId))
+            _machine.Configure(State.PaymentReceived)
+                .SubstateOf(State.Payment)
+                .OnEntryFromAsync(_receivedPaymentTrigger, (correlationId, t) => OnPaymentReceived(correlationId))
                 .InternalTransitionAsync(Trigger.MakePaymentSucceed, t => OnPaymentSucceed(_correlationId))
                 .InternalTransitionAsync(Trigger.MakePaymentFailed, t => OnPaymentFailed(_correlationId))
-                .Permit(Trigger.ChangeCompletedStatus, State.Completed)
-                .OnExitAsync(async () =>
-                {
-                    await OnSendEmail(_internalData.CustomerId);
-                    await OnNotifyEmployee(_internalData.EmployeeId);
-                });
-
+                .Permit(Trigger.ChangeCompletedStatus, State.Completed);
 
             _machine.Configure(State.Completed)
                 .OnEntryFromAsync(_completedTrigger, (correlationId, t) => OnCompletedProcess(correlationId));
@@ -117,7 +115,7 @@ namespace NT.CheckoutProcess.Infrastructure
         public async Task Checkout(Guid correlationId, Guid orderId)
         {
             var result = await LoadFromStorage(correlationId, orderId);
-            _state = (State)result.Item1.SagaStatus;
+            _state = (State) result.Item1.SagaStatus;
             _internalData = result.Item2;
             _correlationId = correlationId;
             await _machine.FireAsync(_checkoutTrigger, correlationId);
@@ -125,11 +123,11 @@ namespace NT.CheckoutProcess.Infrastructure
 
         public async Task PaymentAccepted(Guid correlationId)
         {
-            var result =  await LoadFromStorage(correlationId);
-            _state = (State)result.Item1.SagaStatus;
+            var result = await LoadFromStorage(correlationId);
+            _state = (State) result.Item1.SagaStatus;
             _internalData = result.Item2;
             _correlationId = correlationId;
-            await _machine.FireAsync(_waitingPaymentTrigger, correlationId);
+            await _machine.FireAsync(_receivedPaymentTrigger, correlationId);
         }
 
         private async Task OnCheckout(Guid correlationId)
@@ -194,11 +192,26 @@ namespace NT.CheckoutProcess.Infrastructure
             await UpdateOrderStatus(_internalData.OrderId, OrderStatus.WaitingPayment);
             await UpdateSagaInfo(_internalData.OrderId, correlationId);
 
-            // TODO: 2. Submit request to payment service
-            // TODO: ...
+            // Submit request to payment service
+            var result = await MakePayment(
+                _internalData.OrderId, 
+                _internalData.CustomerId, 
+                _internalData.EmployeeId, 
+                new Guid("AAE5885E-682B-42E8-B230-7AD2DAD55331"), // Master Card 
+                money);
+
+            if (result.Succeed)
+            {
+                _internalData.Money = money;
+                _internalData.PaymentId = result.PaymentId;
+            }
+            else
+            {
+                await _machine.FireAsync(_completedTrigger, correlationId);
+            }
 
             // update storage for next time processing
-            await UpdateStorage(correlationId, (int)State.WaitingPayment, _internalData);
+            await UpdateStorage(correlationId, (int) State.PaymentReceived, _internalData);
         }
 
         private async Task OnPaymentReceived(Guid correlationId)
@@ -210,11 +223,14 @@ namespace NT.CheckoutProcess.Infrastructure
         {
             await UpdateOrderStatus(_internalData.OrderId, OrderStatus.Paid);
             await _machine.FireAsync(_completedTrigger, correlationId);
+            await OnSendEmail(_internalData.CustomerId);
+            await OnNotifyEmployee(_internalData.EmployeeId);
         }
 
         private async Task OnPaymentFailed(Guid correlationId)
         {
-            // TODO: roll back money if has
+            // roll back money if has
+            await CompensateMoney(_internalData.PaymentId.Value, _internalData.Money);
 
             foreach (var product in _internalData.Products)
                 await CompensateQuantityOfProductInCatalog(product.ProductId, product.Quantity);
@@ -222,21 +238,23 @@ namespace NT.CheckoutProcess.Infrastructure
             await _machine.FireAsync(_completedTrigger, correlationId);
         }
 
-        private async Task OnSendEmail(Guid customerId)
+        private Task OnSendEmail(Guid customerId)
         {
             // TODO: Send email to customer based on information in the internal data
             _logger.LogInformation($"Sending an email to customer [{customerId}]");
+            return Task.Delay(0);
         }
 
-        private async Task OnNotifyEmployee(Guid employeeId)
+        private Task OnNotifyEmployee(Guid employeeId)
         {
             // TODO: Put one record for notification into the notification service
             _logger.LogInformation($"Notifying information to employee [{employeeId}]");
+            return Task.Delay(0);
         }
 
         private async Task OnCompletedProcess(Guid correlationId)
         {
-            await UpdateStorage(correlationId, (int)State.Completed, _internalData);
+            await UpdateStorage(correlationId, (int) State.Completed, _internalData);
         }
 
         private async Task<Tuple<SagaInfo, CheckoutInfo>> LoadFromStorage(Guid correlationId, Guid? orderId = null)
@@ -324,6 +342,35 @@ namespace NT.CheckoutProcess.Infrastructure
             var result = await _restClient.PutAsync<SagaResult>(
                 "catalog_service",
                 $"/api/products/{productId}/increase-quantity/{quantityInOrder}");
+            return result.Succeed;
+        }
+
+        private async Task<SagaPaymentResult> MakePayment(
+            Guid orderId, Guid customerId, Guid employeeId, 
+            Guid paymentMethodId, double money)
+        {
+            var paymentInfo = new CustomerPayment
+            {
+                OrderId = orderId,
+                CustomerId = customerId,
+                EmployeeId = employeeId,
+                Money = money,
+                PaymentMethodId = paymentMethodId
+            };
+            var result = await _restClient.PostAsync<SagaPaymentResult>(
+                "payment_service",
+                "/api/payments",
+                paymentInfo
+            );
+            return result;
+        }
+
+        private async Task<bool> CompensateMoney(Guid paymentId, double money)
+        {
+            var result = await _restClient.PostAsync<SagaResult>(
+                "payment_service",
+                $"/api/payments/{paymentId}/compensate-money/{money}"
+            );
             return result.Succeed;
         }
     }

@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard1.6</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\NT.Core\NT.Core.csproj" />
+    <ProjectReference Include="..\..\NT.Infrastructure.EntityFrameworkCore\NT.Infrastructure.EntityFrameworkCore.csproj" />
+    <ProjectReference Include="..\NT.PaymentService.Core\NT.PaymentService.Core.csproj" />
+    <ProjectReference Include="..\..\NT.Infrastructure\NT.Infrastructure.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="1.1.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="1.1.2" />
+  </ItemGroup>
+
+</Project>

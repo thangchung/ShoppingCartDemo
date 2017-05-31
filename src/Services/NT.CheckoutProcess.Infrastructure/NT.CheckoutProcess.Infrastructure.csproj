@@ -17,6 +17,7 @@
     <ProjectReference Include="..\..\NT.Infrastructure\NT.Infrastructure.csproj" />
     <ProjectReference Include="..\NT.CheckoutProcess.Core\NT.CheckoutProcess.Core.csproj" />
     <ProjectReference Include="..\NT.OrderService.Core\NT.OrderService.Core.csproj" />
+    <ProjectReference Include="..\NT.PaymentService.Core\NT.PaymentService.Core.csproj" />
   </ItemGroup>
 
 </Project>

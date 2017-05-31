@@ -39,7 +39,7 @@ namespace NT.Infrastructure.AspNetCore
             return JsonConvert.DeserializeObject<TReturnMessage>(result);
         }
 
-        public async Task<TReturnMessage> PostAsync<TReturnMessage>(string serviceName, string path, object dataObject)
+        public async Task<TReturnMessage> PostAsync<TReturnMessage>(string serviceName, string path, object dataObject = null)
             where TReturnMessage : class, new()
         {
             var serviceInstance = await SelectServiceInfo(serviceName);
@@ -47,7 +47,8 @@ namespace NT.Infrastructure.AspNetCore
             var uri = new Uri($"http://{serviceInstance.Host}:{serviceInstance.Port}{path}");
             _logger.LogInformation("[INFO] POST Uri:" + uri);
 
-            var content = JsonConvert.SerializeObject(dataObject);
+            var content = dataObject != null ? JsonConvert.SerializeObject(dataObject) : "{}";
+
             var response = await _client.PostAsync(uri, new StringContent(content, Encoding.UTF8, "application/json"));
             response.EnsureSuccessStatusCode();
 

@@ -10,6 +10,8 @@ namespace NT.CheckoutProcess.Core
         public List<ProductInfo> Products { get; set; } = new List<ProductInfo>();
         public Guid CustomerId { get; set; }
         public Guid EmployeeId { get; set; }
+        public Guid? PaymentId { get; set; }
+        public double Money { get; set; }
         public DateTime OrderDate { get; set; }
     }
 
