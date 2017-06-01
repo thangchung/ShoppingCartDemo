@@ -24,14 +24,14 @@ namespace NT.AuditService.Api
             return await _genericAuditRepository.ListAsync();
         }
 
-        [HttpPost("{type}/{source}/{actionMessage}")]
-        public async Task<SagaResult> Post(ActionType type, string source, string actionMessage)
+        [HttpPost("{serviceName}/{methodName}/{actionMessage}")]
+        public async Task<SagaResult> Post(string serviceName, string methodName, string actionMessage)
         {
             var auditInfo = await _genericAuditRepository.AddAsync(new AuditInfo
             {
-                ActionType = type,
+                ServiceName = serviceName,
+                MethodName = methodName,
                 ActionMessage = actionMessage,
-                Source = source,
                 Created = DateTimeOffset.Now.UtcDateTime
             });
             if (auditInfo == null)

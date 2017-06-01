@@ -18,9 +18,9 @@ namespace NT.AuditService.Migrator.Migrations
                 {
                     Id = table.Column<Guid>(nullable: false),
                     ActionMessage = table.Column<string>(nullable: true),
-                    ActionType = table.Column<int>(nullable: false),
                     Created = table.Column<DateTime>(nullable: false),
-                    Source = table.Column<string>(nullable: true)
+                    MethodName = table.Column<string>(nullable: true),
+                    ServiceName = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {

@@ -18,15 +18,6 @@ namespace NT.CheckoutProcess.Infrastructure
     /// </summary>
     public class CheckoutSaga
     {
-        // TODO: will find out the better way
-        public enum ActionType
-        {
-            Query,
-            Create,
-            Modify,
-            Delete
-        }
-
         public enum State
         {
             Checkout,
@@ -122,7 +113,7 @@ namespace NT.CheckoutProcess.Infrastructure
 
         public async Task Checkout(Guid correlationId, Guid orderId)
         {
-            await Audit(ActionType.Create, "Saga:Action", $"Start checkout the order #{orderId}, saga id #{correlationId}");
+            await Audit("CheckoutService", $"CheckoutSaga|Checkout({correlationId}, {orderId}):Action", "The order is checking out...");
 
             var result = await LoadFromStorage(correlationId, orderId);
             _state = (State) result.Item1.SagaStatus;
@@ -133,8 +124,8 @@ namespace NT.CheckoutProcess.Infrastructure
 
         public async Task PaymentAccepted(Guid correlationId)
         {
-            await Audit(ActionType.Create, "Saga:Action", $"The payment is accepted, saga id #{correlationId}");
-
+            await Audit("CheckoutService", $"CheckoutSaga|PaymentAccepted({correlationId}):Action", "The payment is accepted by the payment gateway.");
+                                                                                                                           
             var result = await LoadFromStorage(correlationId);
             _state = (State) result.Item1.SagaStatus;
             _internalData = result.Item2;
@@ -144,14 +135,14 @@ namespace NT.CheckoutProcess.Infrastructure
 
         private async Task OnCheckout(Guid correlationId)
         {
-            await Audit(ActionType.Modify, "Saga:Trigger", $"Checkout processing, saga id #{correlationId}");
+            await Audit("CheckoutService", $"CheckoutSaga|OnCheckout({correlationId}):Trigger", "Checkout is processing...");
 
             await _machine.FireAsync(_orderStatusTrigger, correlationId);
         }
 
         private async Task OnUpdateOrderStatus()
         {
-            await Audit(ActionType.Modify, "Saga:Trigger", $"Update order status, saga id #{_correlationId}");
+            await Audit("CheckoutService", $"CheckoutSaga|OnUpdateOrderStatus({_correlationId}):Trigger", "Order status is updating...");
 
             var isSucceed = await UpdateOrderStatus(_internalData.OrderId, OrderStatus.Processing);
             if (isSucceed)
@@ -162,14 +153,14 @@ namespace NT.CheckoutProcess.Infrastructure
 
         private async Task OnOrderStatusSucceed(Guid correlationId)
         {
-            await Audit(ActionType.Modify, "Saga:Trigger", $"Update order status succeed, saga id #{_correlationId}");
+            await Audit("CheckoutService", $"CheckoutSaga|OnOrderStatusSucceed({_correlationId}):Trigger", "Order status is updated successfully.");
 
             await _machine.FireAsync(_productQuantityTrigger, correlationId);
         }
 
         private async Task OnOrderStatusFailed(Guid correlationId)
         {
-            await Audit(ActionType.Modify, "Saga:Trigger", $"Update order status failed, saga id #{_correlationId}");
+            await Audit("CheckoutService", $"CheckoutSaga|OnOrderStatusFailed({_correlationId}):Trigger", "Order status is not updated successfully.");
 
             await UpdateOrderStatus(_internalData.OrderId, OrderStatus.New);
             await _machine.FireAsync(_completedTrigger, correlationId);
@@ -177,7 +168,7 @@ namespace NT.CheckoutProcess.Infrastructure
 
         private async Task OnUpdateProductQuantity()
         {
-            await Audit(ActionType.Modify, "Saga:Trigger", $"Update product quantity, saga id #{_correlationId}");
+            await Audit("CheckoutService", $"CheckoutSaga|OnUpdateProductQuantity({_correlationId}):Trigger", "Product quantity is updating...");
 
             var isSucceed = true;
             foreach (var product in _internalData.Products)
@@ -191,14 +182,14 @@ namespace NT.CheckoutProcess.Infrastructure
 
         private async Task OnProductQuantitySucceed(Guid correlationId)
         {
-            await Audit(ActionType.Modify, "Saga:Trigger", $"Update product quantity succeed, saga id #{_correlationId}");
+            await Audit("CheckoutService", $"CheckoutSaga|OnProductQuantitySucceed({_correlationId}):Trigger", "Product quantity is updated successfully.");
 
             await _machine.FireAsync(_paymentTrigger, correlationId);
         }
 
         private async Task OnProductQuantityFailed(Guid correlationId)
         {
-            await Audit(ActionType.Modify, "Saga:Trigger", $"Update product quantity failed, saga id #{_correlationId}");
+            await Audit("CheckoutService", $"CheckoutSaga|OnProductQuantityFailed({_correlationId}):Trigger", "Product quantity is not updated successfully.");
 
             foreach (var product in _internalData.Products)
                 await CompensateQuantityOfProductInCatalog(product.ProductId, product.Quantity);
@@ -208,7 +199,7 @@ namespace NT.CheckoutProcess.Infrastructure
 
         private async Task OnMakePayment(Guid correlationId)
         {
-            await Audit(ActionType.Create, "Saga:Trigger", $"Make a payment, saga id #{_correlationId}");
+            await Audit("CheckoutService", $"CheckoutSaga|OnMakePayment({_correlationId}):Trigger", "A payment is making...");
 
             var money = 0.0D;
             foreach (var productInOrder in _internalData.Products)
@@ -244,14 +235,14 @@ namespace NT.CheckoutProcess.Infrastructure
 
         private async Task OnPaymentReceived(Guid correlationId)
         {
-            await Audit(ActionType.Modify, "Saga:Trigger", $"Payment gateway accepted, saga id #{_correlationId}");
+            await Audit("CheckoutService", $"CheckoutSaga|OnPaymentReceived({_correlationId}):Trigger", "The payment is received");
 
             await _machine.FireAsync(Trigger.MakePaymentSucceed);
         }
 
         private async Task OnPaymentSucceed(Guid correlationId)
         {
-            await Audit(ActionType.Modify, "Saga:Trigger", $"Payment gateway succeed, saga id #{_correlationId}");
+            await Audit("CheckoutService", $"CheckoutSaga|OnPaymentSucceed({_correlationId}):Trigger", "The payment is processed successfully.");
 
             await UpdateOrderStatus(_internalData.OrderId, OrderStatus.Paid);
             await _machine.FireAsync(_completedTrigger, correlationId);
@@ -261,7 +252,7 @@ namespace NT.CheckoutProcess.Infrastructure
 
         private async Task OnPaymentFailed(Guid correlationId)
         {
-            await Audit(ActionType.Modify, "Saga:Trigger", $"Payment gateway failed, saga id #{_correlationId}");
+            await Audit("CheckoutService", $"CheckoutSaga|OnPaymentFailed({_correlationId}):Trigger", "The payment is not processed successfully.");
 
             // roll back money if has
             await CompensateMoney(_internalData.PaymentId.Value, _internalData.Money);
@@ -274,7 +265,7 @@ namespace NT.CheckoutProcess.Infrastructure
 
         private async Task OnSendEmail(Guid customerId)
         {
-            await Audit(ActionType.Modify, "Saga:Trigger", $"Sending an email to customer #{customerId}, saga id #{_correlationId}");
+            await Audit("CheckoutService", $"CheckoutSaga|OnSendEmail({_correlationId})", $"An email is sending to customer #[{customerId}]...");
 
             // TODO: Send email to customer based on information in the internal data
             // TODO: ...
@@ -282,7 +273,7 @@ namespace NT.CheckoutProcess.Infrastructure
 
         private async Task OnNotifyEmployee(Guid employeeId)
         {
-            await Audit(ActionType.Modify, "Saga:Trigger", $"Notifying information to employee [{employeeId}], saga id #{_correlationId}");
+            await Audit("CheckoutService", $"CheckoutSaga|OnNotifyEmployee({_correlationId})", $"Notification message is sending to employee #[{employeeId}]...");
 
             // TODO: Put one record for notification into the notification service
             // TODO: ...
@@ -290,7 +281,7 @@ namespace NT.CheckoutProcess.Infrastructure
 
         private async Task OnCompletedProcess(Guid correlationId)
         {
-            await Audit(ActionType.Delete, "Saga:Trigger", $"Process completed, saga id #{_correlationId}");
+            await Audit("CheckoutService", $"CheckoutSaga|OnCompletedProcess({_correlationId}):Trigger", "Checkout process is completed.");
 
             await UpdateStorage(correlationId, (int) State.Completed, _internalData);
         }
@@ -412,11 +403,11 @@ namespace NT.CheckoutProcess.Infrastructure
             return result.Succeed;
         }
 
-        private async Task<bool> Audit(ActionType type, string source, string actionMessage)
+        private async Task<bool> Audit(string serviceName, string methodName, string actionMessage)
         {
             var result = await _restClient.PostAsync<SagaResult>(
                 "audit_service",
-                $"/api/audits/{type}/{source}/{actionMessage}"
+                $"/api/audits/{serviceName}/{methodName}/{actionMessage}"
             );
             return result.Succeed;
         }
