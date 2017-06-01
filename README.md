@@ -86,19 +86,6 @@ dotnet ef migrations add InitDatabase -c AuditDbContext
 dotnet run
 ```
 
-### Service Discovery (Windows only)
-
-```
-consul.exe agent -dev
-```
-
-### RabbitMQ
-
-- Make sure installing the RabbitMQ for Windows at https://www.rabbitmq.com/install-windows.html
-- Enable the management UI at https://www.rabbitmq.com/management.html
-- Create the `root` / `root` user
-- Create the `shopping_cart` queue and `shopping_cart` vhost (assign the `root` user to this vhost)
-
 ### Services
 
 - Customer Service: http://localhost:8801
@@ -112,8 +99,27 @@ consul.exe agent -dev
 - RabbitMQ endpoint (core): http://localhost:15672 (`guest` / `guest`)
 - Discovery Service (core): http://localhost:8500
 
-![Discovery Service](https://github.com/thangchung/ShoppingCartDemo/blob/master/docs/ServiceDiscovery.png)
-
 ### Saga flow
 
-![Checkout flow](https://github.com/thangchung/ShoppingCartDemo/blob/master/docs/CheckoutProcess.png)
+- The end user submits the checkout 
+
+![Checkout flow 1](https://github.com/thangchung/ShoppingCartDemo/blob/master/docs/CheckoutSaga_1.png)
+
+- The payment gateway accepts the payment request and calls back to Saga
+
+![Checkout flow 2](https://github.com/thangchung/ShoppingCartDemo/blob/master/docs/CheckoutSaga_2.png)
+
+### Service Discovery (Windows only)
+
+```
+consul.exe agent -dev
+```
+
+![Discovery Service](https://github.com/thangchung/ShoppingCartDemo/blob/master/docs/ServiceDiscovery.png)
+
+### RabbitMQ
+
+- Make sure installing the RabbitMQ for Windows at https://www.rabbitmq.com/install-windows.html
+- Enable the management UI at https://www.rabbitmq.com/management.html
+- Create the `root` / `root` user
+- Create the `shopping_cart` queue and `shopping_cart` vhost (assign the `root` user to this vhost)
