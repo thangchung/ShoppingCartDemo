@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using NT.CatalogService.Core;
@@ -12,6 +13,12 @@ namespace NT.WebApi.CatalogContext
         public ProductApiController(RestClient restClient) 
             : base(restClient)
         {
+        }
+
+        [HttpGet]
+        public async Task<IEnumerable<Product>> Get()
+        {
+            return await RestClient.GetAsync<List<Product>>("catalog_service", "/api/products");
         }
 
         [HttpGet("{id}")]

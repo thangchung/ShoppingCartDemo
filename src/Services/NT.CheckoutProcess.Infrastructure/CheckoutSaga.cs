@@ -13,9 +13,6 @@ using Stateless;
 
 namespace NT.CheckoutProcess.Infrastructure
 {
-    /// <summary>
-    /// TODO: Need to have an ActivityAudit Service so that we can track the activity in UI
-    /// </summary>
     public class CheckoutSaga
     {
         public enum State
@@ -172,7 +169,7 @@ namespace NT.CheckoutProcess.Infrastructure
 
             var isSucceed = true;
             foreach (var product in _internalData.Products)
-                isSucceed = isSucceed && await DescreaseQuantityOfProductInCatalog(product.ProductId, product.Quantity);
+                isSucceed = isSucceed && await DecreaseQuantityOfProductInCatalog(product.ProductId, product.Quantity);
 
             if (isSucceed)
                 await _machine.FireAsync(Trigger.UpdateProductQuantitySucceed);
@@ -358,11 +355,11 @@ namespace NT.CheckoutProcess.Infrastructure
             return result.Price;
         }
 
-        private async Task<bool> DescreaseQuantityOfProductInCatalog(Guid productId, int quantityInOrder)
+        private async Task<bool> DecreaseQuantityOfProductInCatalog(Guid productId, int quantityInOrder)
         {
             var result = await _restClient.PutAsync<SagaResult>(
                 "catalog_service",
-                $"/api/products/{productId}/descrease-quantity/{quantityInOrder}");
+                $"/api/products/{productId}/decrease-quantity/{quantityInOrder}");
             return result.Succeed;
         }
 

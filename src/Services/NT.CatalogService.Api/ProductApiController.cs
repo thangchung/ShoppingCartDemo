@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using NT.CatalogService.Core;
@@ -15,6 +17,13 @@ namespace NT.CatalogService.Api
         public ProductApiController(IRepository<Product> genericProductRepository)
         {
             _genericProductRepository = genericProductRepository;
+        }
+
+        [HttpGet]
+        public async Task<IEnumerable<Product>> Get()
+        {
+            var result =  await _genericProductRepository.ListAsync();
+            return result.OrderByDescending(x => x.Name);
         }
 
         [HttpGet("{id}")]
@@ -45,8 +54,8 @@ namespace NT.CatalogService.Api
             return await Task.FromResult(new SagaResult { Succeed = true });
         }
 
-        [HttpPut("{productId}/descrease-quantity/{quantityInOrder}")]
-        public async Task<SagaResult> DescreaseQuantityInCatalog(Guid productId, int quantityInOrder)
+        [HttpPut("{productId}/decrease-quantity/{quantityInOrder}")]
+        public async Task<SagaResult> DecreaseQuantityInCatalog(Guid productId, int quantityInOrder)
         {
             var product = await _genericProductRepository.GetByIdAsync(productId);
             if (product == null || product.Quantity < quantityInOrder)
