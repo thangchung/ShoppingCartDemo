@@ -28,5 +28,11 @@ namespace NT.WebApi.ShoppingCart
             _messageBus.Publish(new CheckoutEvent(orderId));
             return await Task.FromResult($"Order[#{orderId}] is processing...");
         }
+
+        [HttpPost]
+        public async Task<bool> Post(CartViewModel cartViewModel)
+        {
+            return await Task.FromResult(true);
+        }
     }
 }

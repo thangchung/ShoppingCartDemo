@@ -1,12 +1,14 @@
 import { combineReducers } from "redux";
 import { routerReducer } from "react-router-redux";
 import { reducer as oidcReducer } from "redux-oidc";
-import products from "./products";
+import home from "./home";
+import payment from "./payment";
 
 const reducers = {
   routing: routerReducer,
   oidc: oidcReducer,
-  productStore: products
+  homeStore: home,
+  paymentStore: payment
 };
 
 export default combineReducers(reducers);

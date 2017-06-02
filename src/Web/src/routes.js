@@ -3,10 +3,10 @@ import { IndexRoute, Route } from "react-router";
 import SimpleLayout from "./containers/App/SimpleLayout";
 import FullLayout from "./containers/App/FullLayout";
 import Home from "./containers/Home/Home";
-// import BlogInfo from "./containers/Blog/BlogInfo";
 import Login from "./containers/Login/Login";
 import Callback from "./containers/Login/Callback";
 import NotFound from "./containers/NotFound/NotFound";
+import Payment from "./containers/Payment/Payment";
 
 export default store => {
   const requireLogin = (nextState, replace, cb) => {
@@ -20,7 +20,6 @@ export default store => {
     }
     checkAuth();
   };
-  //<Route name="Blog Info" path="blog-info" component={BlogInfo} />
 
   return (
     <Route>
@@ -28,11 +27,11 @@ export default store => {
         <IndexRoute component={Home} />
         <Route name="Login" path="login" component={Login} />
         <Route path="callback" component={Callback} />
+        <Route path="payment" component={Payment} />
       </Route>
 
       <Route name="Admin" path="admin" onEnter={requireLogin} component={FullLayout}>
         <IndexRoute component={Home} />
-        
       </Route>
       <Route path="*" component={NotFound} status={404} />
     </Route>
