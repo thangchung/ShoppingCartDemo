@@ -19,8 +19,8 @@ namespace NT.WebApi.ShoppingCart
             _messageBus = messageBus;
         }
 
-        [HttpPost]
-        public async Task<string> Post(Guid orderId)
+        [HttpPost("{orderId}/process")]
+        public async Task<string> ProcessOrder(Guid orderId)
         {
             var order = await RestClient.GetAsync<Order>("order_service", $"/api/orders/{orderId}");
             if (order.OrderStatus == OrderStatus.Processing || order.OrderStatus == OrderStatus.Paid)

@@ -32,5 +32,17 @@ namespace NT.WebApi.CustomerContext
         {
             return await RestClient.PostAsync<Customer>("customer_service", "/api/customers", customer);
         }
+
+        [HttpPatch]
+        public void Put()
+        {
+
+        }
+
+        [HttpDelete]
+        public void Delete()
+        {
+            
+        }
     }
 }
