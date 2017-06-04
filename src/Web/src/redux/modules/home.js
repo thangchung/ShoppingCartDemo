@@ -97,16 +97,8 @@ export default function reducer(state = initialState, action = {}) {
   }
 }
 
-export function productsLoading() {
-  return { type: LOAD_HOME_PRODUCTS };
-}
-
-export function loadProducts(products) {
-  return { type: LOAD_HOME_PRODUCTS_SUCCESSED, products };
-}
-
 export function addProductToCart(product, quantity) {
-  return (dispatch, getState) => {
+  return dispatch => {
     dispatch({ type: ADD_HOME_PRODUCT_TO_CART, product, quantity });
     return dispatch(getProducts());
   };
@@ -124,6 +116,14 @@ export function removeProductFromCart(product) {
     dispatch({ type: REMOVE_PRODUCT_FROM_CART, product });
     return dispatch(getProducts());
   };
+}
+
+export function productsLoading() {
+  return { type: LOAD_HOME_PRODUCTS };
+}
+
+export function loadProducts(products) {
+  return { type: LOAD_HOME_PRODUCTS_SUCCESSED, products };
 }
 
 export function getProducts() {
