@@ -30,8 +30,15 @@ namespace NT.WebApi.ShoppingCart
         }
 
         [HttpPost]
-        public async Task<bool> Post(CartViewModel cartViewModel)
+        public async Task<bool> Post([FromBody] CartViewModel cartViewModel)
         {
+            //TODO: hard code the customer id and employee id for now
+            cartViewModel.CustomerId = new Guid("37EB08EF-E4C2-4211-B808-F64A81AE02FC");
+            cartViewModel.EmployeeId = new Guid("d3b13f7e-8978-4364-96dd-978878de9fce");
+            var order = await RestClient.PostAsync<Order>("order_service", "/api/orders", cartViewModel);
+            if (order.OrderStatus == OrderStatus.Processing || order.OrderStatus == OrderStatus.Paid)
+                return await Task.FromResult(false);
+            _messageBus.Publish(new CheckoutEvent(order.Id));
             return await Task.FromResult(true);
         }
     }

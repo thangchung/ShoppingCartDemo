@@ -1,6 +1,5 @@
 const initialState = {
   loaded: false,
-  shipInfo: {},
   error: null
 };
 

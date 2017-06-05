@@ -7,6 +7,8 @@ namespace NT.WebApi.ShoppingCart
     {
         public List<ProductViewModel> Products { get; set; }
         public ShipInfoViewModel ShipInfo { get; set; }
+        public Guid CustomerId { get; set; }
+        public Guid EmployeeId { get; set; }
     }
 
     public class ProductViewModel

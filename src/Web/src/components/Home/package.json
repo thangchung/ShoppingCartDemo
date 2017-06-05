@@ -1,0 +1,6 @@
+{
+  "name": "ShoppingCart",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./ShoppingCart.js"
+}

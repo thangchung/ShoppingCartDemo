@@ -44,15 +44,8 @@ class Header extends Component {
           </button>}
 
         <Link className="navbar-brand" to="/"><b>Shopping Cart Demo</b></Link>
+        
         {!isAuth &&
-          <Button color="default"><Link to="/login">Login</Link></Button>}
-        {!isAuth && <Link className="pull-right" to="/payment">Payment</Link>}
-        {!isAuth && <Link className="pull-right" to="/audit">Audit</Link>}
-        {isAuth &&
-          <Button color="default" onClick={this.onLogoutButtonClicked}>
-            Logout
-          </Button>}
-        {isAuth &&
           <ul className="nav navbar-nav d-md-down-none mr-auto">
             <li className="nav-item">
               <a
@@ -63,7 +56,19 @@ class Header extends Component {
                 ☰
               </a>
             </li>
+            <li className="nav-item px-1">
+              <Link className="nav-link navbar-toggler sidebar-toggler" to="/payment">Payment</Link>
+            </li>
+            <li className="nav-item px-1">
+              <Link className="nav-link navbar-toggler sidebar-toggler" to="/audit">Audit</Link>
+            </li>
           </ul>}
+          {!isAuth &&
+          <Link className="pull-right" to="/login">Login</Link>}
+        {isAuth &&
+          <Button color="default" onClick={this.onLogoutButtonClicked}>
+            Logout
+          </Button>}
       </header>
     );
   }

@@ -7545,7 +7545,7 @@ base-chart.chart {
   border-bottom: 1px solid #cfd8dc; }
   .app-header.navbar .navbar-brand {
     display: inline-block;
-    width: 155px;
+    width: 220px; /* 155px */
     height: 55px;
     padding: 0.5rem 1rem;
     margin-right: 0;

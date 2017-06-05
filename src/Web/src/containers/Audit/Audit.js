@@ -14,8 +14,8 @@ class AuditList extends Component {
         <Row>
           <Col xs="12">
             <div>
-              <Table>
-                <thead>
+              <Table striped responsive hover>
+                <thead className="thead-default">
                   <tr>
                     <td>Service name</td>
                     <td>Method name</td>

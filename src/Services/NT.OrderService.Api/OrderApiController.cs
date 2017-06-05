@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using NT.Core;
 using NT.Core.Results;
+using NT.Core.SharedKernel;
 using NT.OrderService.Core;
 
 namespace NT.OrderService.Api
@@ -34,16 +35,40 @@ namespace NT.OrderService.Api
             return await _orderRepository.GetFullOrder(id);
         }
 
+        [HttpPost]
+        public async Task<Order> Post([FromBody] OrderCreationViewModel viewModel)
+        {
+            var order = new Order
+            {
+                CustomerId = viewModel.CustomerId,
+                EmployeeId = viewModel.EmployeeId,
+                OrderDate = DateTimeOffset.UtcNow.DateTime,
+                OrderStatus = OrderStatus.New,
+                OrderDetails = viewModel.Products,
+                ShipInfo = new ShipInfo(
+                    Guid.NewGuid(),
+                    viewModel.ShipInfo.Name,
+                    new AddressInfo(
+                        Guid.NewGuid(),
+                        viewModel.ShipInfo.Address,
+                        viewModel.ShipInfo.City,
+                        viewModel.ShipInfo.Region,
+                        viewModel.ShipInfo.PostalCode,
+                        viewModel.ShipInfo.Country))
+            };
+            return await _genericOrderRepository.AddAsync(order);
+        }
+
         [HttpPut("{orderId}/status/{status}")]
         public async Task<SagaResult> Put(Guid orderId, OrderStatus status)
         {
             var order = await _genericOrderRepository.GetByIdAsync(orderId);
-            if(order == null)
-                return await Task.FromResult(new SagaResult { Succeed = false });
+            if (order == null)
+                return await Task.FromResult(new SagaResult {Succeed = false});
 
             order.OrderStatus = status;
             await _genericOrderRepository.UpdateAsync(order);
-            return await Task.FromResult(new SagaResult { Succeed = true });
+            return await Task.FromResult(new SagaResult {Succeed = true});
         }
 
         [HttpPut("{orderId}/update-saga/{sagaId}")]
@@ -51,11 +76,29 @@ namespace NT.OrderService.Api
         {
             var order = await _genericOrderRepository.GetByIdAsync(orderId);
             if (order == null)
-                return await Task.FromResult(new SagaResult { Succeed = false });
+                return await Task.FromResult(new SagaResult {Succeed = false});
 
             order.SagaId = sagaId;
             await _genericOrderRepository.UpdateAsync(order);
-            return await Task.FromResult(new SagaResult { Succeed = true });
+            return await Task.FromResult(new SagaResult {Succeed = true});
         }
+    }
+
+    public class OrderCreationViewModel
+    {
+        public List<OrderDetail> Products { get; set; }
+        public ShipInfoViewModel ShipInfo { get; set; }
+        public Guid CustomerId { get; set; }
+        public Guid EmployeeId { get; set; }
+    }
+
+    public class ShipInfoViewModel
+    {
+        public string Name { get; set; }
+        public string Address { get; set; }
+        public string City { get; set; }
+        public string Region { get; set; }
+        public string PostalCode { get; set; }
+        public string Country { get; set; }
     }
 }
