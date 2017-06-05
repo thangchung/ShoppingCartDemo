@@ -25,8 +25,8 @@ namespace NT.PaymentService.Api
         {
             var builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
+                .AddJsonFile("appsettings.json", false, true)
+                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", true)
                 .AddEnvironmentVariables();
             Configuration = builder.Build();
         }
@@ -54,15 +54,18 @@ namespace NT.PaymentService.Api
                 .As<IEventBus>()
                 .SingleInstance();
 
-            builder.RegisterInstance(new RabbitMqSubscriber(Configuration.GetValue<string>("Rabbitmq"), "order.exchange", "order.queue"))
-                .Named<IEventSubscriber>("EventSubscriber");
+            builder.RegisterInstance(new RabbitMqSubscriber(Configuration.GetValue<string>("Rabbitmq"),
+                    "order.exchange", "order.queue"))
+                .Named<IEventSubscriber>("EventSubscriber")
+                .SingleInstance();
 
             builder.Register(x =>
-                new EventConsumer(
-                    x.ResolveNamed<IEventSubscriber>("EventSubscriber"),
-                    (IEnumerable<IMessageHandler>)x.Resolve(typeof(IEnumerable<IMessageHandler>))
-                )
-            ).As<IEventConsumer>();
+                    new EventConsumer(
+                        x.ResolveNamed<IEventSubscriber>("EventSubscriber"),
+                        (IEnumerable<IMessageHandler>) x.Resolve(typeof(IEnumerable<IMessageHandler>))
+                    )
+                ).As<IEventConsumer>()
+                .SingleInstance();
 
             // Add framework services.
             services.AddMvc();

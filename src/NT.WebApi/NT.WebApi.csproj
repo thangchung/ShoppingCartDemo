@@ -40,6 +40,7 @@
     <ProjectReference Include="..\Services\NT.CatalogService.Core\NT.CatalogService.Core.csproj" />
     <ProjectReference Include="..\Services\NT.CustomerService.Core\NT.CustomerService.Core.csproj" />
     <ProjectReference Include="..\Services\NT.OrderService.Core\NT.OrderService.Core.csproj" />
+    <ProjectReference Include="..\Services\NT.PaymentService.Core\NT.PaymentService.Core.csproj" />
   </ItemGroup>
 
 </Project>

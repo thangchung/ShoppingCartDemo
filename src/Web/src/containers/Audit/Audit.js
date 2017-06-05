@@ -17,6 +17,7 @@ class AuditList extends Component {
               <Table striped responsive hover>
                 <thead className="thead-default">
                   <tr>
+                    <td>#</td>
                     <td>Service name</td>
                     <td>Method name</td>
                     <td>Action</td>
@@ -25,8 +26,9 @@ class AuditList extends Component {
                   </tr>
                 </thead>
                 <tbody>
-                  {ids.map(id => (
+                  {ids.map((id, index) => (
                     <tr key={id}>
+                      <td>{index + 1}</td>
                       <td>{audits[id].serviceName}</td>
                       <td>{audits[id].methodName}</td>
                       <td>{audits[id].actionMessage}</td>
@@ -69,12 +71,12 @@ class Audit extends Component {
   }
 }
 
-Audit.propTypes = {
+/*Audit.propTypes = {
   loading: PropTypes.bool.isRequired,
   byIds: PropTypes.array.isRequired,
   audits: PropTypes.object.isRequired,
   getAudits: PropTypes.func.isRequired
-};
+};*/
 
 function mapStateToProps(state, ownProps) {
   return {

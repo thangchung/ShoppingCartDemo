@@ -32,7 +32,6 @@ class Checkout extends Component {
   render() {
     const { cart } = this.props.homeStore;
     const { shipInfo } = this.props.checkoutStore;
-    // console.log(cart);
     return (
       <Card>
         <CardBlock>

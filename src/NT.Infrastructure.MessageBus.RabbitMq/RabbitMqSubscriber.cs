@@ -56,7 +56,7 @@ namespace NT.Infrastructure.MessageBus.RabbitMq
                     OnMessageReceived(new MessageReceivedEventArgs(message));
                     _channel.BasicAck(e.DeliveryTag, false);
                 };
-                _channel.BasicConsume(_queueName, false, consumer);
+                _channel.BasicConsume(_queueName, true, consumer);
             });
         }
 

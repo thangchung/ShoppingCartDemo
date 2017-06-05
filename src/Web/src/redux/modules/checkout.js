@@ -57,8 +57,6 @@ export function fetchDefaultData() {
 }
 
 export function doCheckout(cart, shipInfo) {
-  // console.log(products);
-  // console.log(shipInfo);
   var products = [];
   cart.forEach(function(c) {
     const { product, quantity, ...remains } = c;
@@ -67,11 +65,6 @@ export function doCheckout(cart, shipInfo) {
       quantity
     });
   }, this);
-
-  console.log({
-    products: products,
-    shipInfo: shipInfo
-  });
 
   const payload = {
     products: products,

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using NT.Core;
@@ -8,6 +9,7 @@ using NT.Infrastructure.AspNetCore;
 using NT.Infrastructure.MessageBus.Event;
 using NT.OrderService.Core;
 using NT.PaymentService.Core;
+using System.Linq;
 
 namespace NT.PaymentService.Api
 {
@@ -25,6 +27,13 @@ namespace NT.PaymentService.Api
             _genericPaymentMethodRepository = genericPaymentMethodRepository;
             _messageBus = messageBus;
             _restClient = restClient;
+        }
+
+        [HttpGet]
+        public async Task<IEnumerable<CustomerPayment>> Get()
+        {
+            var result = await _genericPaymentRepository.ListAsync();
+            return result.OrderBy(x => x.PaymentStatus);
         }
 
         [HttpPost]

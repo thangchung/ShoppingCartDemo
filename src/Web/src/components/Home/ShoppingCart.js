@@ -22,7 +22,7 @@ export default class ShoppingCart extends Component {
       handleRemoveProductFromCart,
       isConfirmPage
     } = this.props;
-    console.log(this.props);
+    let money = 0;
     return (
       <div>
         <Row>
@@ -31,6 +31,7 @@ export default class ShoppingCart extends Component {
               <Table striped responsive hover>
                 <thead>
                   <tr>
+                    <td>#</td>
                     <td>Name</td>
                     <td>Model</td>
                     <td>Price</td>
@@ -39,8 +40,10 @@ export default class ShoppingCart extends Component {
                   </tr>
                 </thead>
                 <tbody>
-                  {products.map(p => (
-                    <tr key={p.product.id}>
+                  {products.map((p, index) => {
+                    money += p.product.price * p.quantity;
+                    return (<tr key={p.product.id}>
+                      <td>{index +1}</td>
                       <td>{p.product.name}</td>
                       <td>{p.product.model}</td>
                       <td>${p.product.price}</td>
@@ -56,14 +59,15 @@ export default class ShoppingCart extends Component {
                         </Button>
                         }
                       </td>
-                    </tr>
-                  ))}
+                    </tr>)
+                  })}
                   <tr>
                     <td>&nbsp;</td>
                     <td>&nbsp;</td>
-                    <td>&nbsp;</td>
                     <td><b>Total</b>:</td>
-                    <td>$1234</td>
+                    <td><b>${money}</b></td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
                   </tr>
                 </tbody>
               </Table>

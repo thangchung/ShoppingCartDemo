@@ -58,7 +58,6 @@ export function loadAudits(audits) {
 
 export function getAudits() {
   return (dispatch, getState) => {
-    console.log(getState());
     if (!getState()["auditStore"]["loaded"]) {
       dispatch(auditsLoading());
       return fetch(LOAD_AUDITS_URL)

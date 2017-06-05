@@ -97,14 +97,16 @@ namespace NT.WebApi
                 .SingleInstance();
 
             builder.RegisterInstance(new RabbitMqSubscriber(Configuration.GetValue<string>("Rabbitmq"), "order.exchange", "order.queue"))
-                .Named<IEventSubscriber>("EventSubscriber");
+                .Named<IEventSubscriber>("EventSubscriber")
+                .SingleInstance();
 
             builder.Register(x =>
                 new EventConsumer(
                     x.ResolveNamed<IEventSubscriber>("EventSubscriber"),
                     (IEnumerable<IMessageHandler>)x.Resolve(typeof(IEnumerable<IMessageHandler>))
                 )
-            ).As<IEventConsumer>();
+            ).As<IEventConsumer>()
+            .SingleInstance();
 
             builder.Populate(services);
             var serviceProvider = builder.Build().Resolve<IServiceProvider>();
