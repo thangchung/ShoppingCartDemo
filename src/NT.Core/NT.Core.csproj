@@ -5,9 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Reference Include="System.Runtime.Serialization.Formatters">
-      <HintPath>..\..\..\..\..\thangchung.HARVEYNASH\.nuget\packages\system.runtime.serialization.formatters\4.3.0\ref\netstandard1.3\System.Runtime.Serialization.Formatters.dll</HintPath>
-    </Reference>
+    <PackageReference Include="System.Runtime.Serialization.Formatters" Version="4.3.0" />
   </ItemGroup>
 
 </Project>

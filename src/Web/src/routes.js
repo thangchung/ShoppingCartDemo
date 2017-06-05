@@ -6,7 +6,9 @@ import Home from "./containers/Home/Home";
 import Login from "./containers/Login/Login";
 import Callback from "./containers/Login/Callback";
 import NotFound from "./containers/NotFound/NotFound";
+import Checkout from "./containers/Home/Checkout";
 import Payment from "./containers/Payment/Payment";
+import Audit from "./containers/Audit/Audit";
 
 export default store => {
   const requireLogin = (nextState, replace, cb) => {
@@ -27,10 +29,17 @@ export default store => {
         <IndexRoute component={Home} />
         <Route name="Login" path="login" component={Login} />
         <Route path="callback" component={Callback} />
+        <Route path="checkout" component={Checkout} />
         <Route path="payment" component={Payment} />
+        <Route path="audit" component={Audit} />
       </Route>
 
-      <Route name="Admin" path="admin" onEnter={requireLogin} component={FullLayout}>
+      <Route
+        name="Admin"
+        path="admin"
+        onEnter={requireLogin}
+        component={FullLayout}
+      >
         <IndexRoute component={Home} />
       </Route>
       <Route path="*" component={NotFound} status={404} />

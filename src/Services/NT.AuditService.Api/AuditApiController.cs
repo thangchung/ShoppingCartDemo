@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using NT.AuditService.Core;
@@ -21,7 +22,8 @@ namespace NT.AuditService.Api
         [HttpGet]
         public async Task<IEnumerable<AuditInfo>> Get()
         {
-            return await _genericAuditRepository.ListAsync();
+            var result = await _genericAuditRepository.ListAsync();
+            return result.OrderByDescending(x => x.Created);
         }
 
         [HttpPost("{serviceName}/{methodName}/{actionMessage}")]

@@ -72,7 +72,7 @@ class ShoppingCart extends Component {
             <Button color="danger" onClick={() => handleEmptyCartClick()}>
               Empty cart
             </Button>
-            <Button color="info"><Link to="/payment">Checkout</Link></Button>
+            <Button color="info"><Link to="/checkout">Checkout</Link></Button>
           </Col>
         </Row>
       </div>
@@ -158,13 +158,14 @@ class Home extends Component {
   }
 
   render() {
-    const { products, cart, loading } = this.props.homeStore;
+    let { products, cart, loading } = this.props.homeStore;
     let listProducts = "";
 
     if (loading === true) {
       listProducts = "Loading...";
     } else {
       let threeItems = [], index = 1;
+      const backup = products.map(p => p);
       while (products.length > 0) {
         threeItems = products.splice(0, 3);
         listProducts = [
@@ -177,39 +178,32 @@ class Home extends Component {
         ];
         index++;
       }
+      products = backup;
     }
 
     return (
       <div>
-        <div style={styles.home}>
-        <Card >
+        <Card>
           <CardBlock>
-          <CardTitle>Cart</CardTitle>
-          <Container>
-            {
-              <ShoppingCart
-                products={cart}
-                handleEmptyCartClick={this.handleEmptyCartClick.bind(this)}
-                handleRemoveProductFromCart={this.handleRemoveProductFromCart.bind(
-                  this
-                )}
-              />
-            }
-          </Container>
+            <CardTitle>Cart</CardTitle>
+            <Container>
+              {
+                <ShoppingCart
+                  products={cart}
+                  handleEmptyCartClick={this.handleEmptyCartClick.bind(this)}
+                  handleRemoveProductFromCart={this.handleRemoveProductFromCart.bind(
+                    this
+                  )}
+                />
+              }
+            </Container>
           </CardBlock>
         </Card>
-        </div>
         <Container>
           {listProducts}
         </Container>
       </div>
     );
-  }
-}
-
-const styles = {
-  home: {
-    "margin-top": "20px"
   }
 }
 

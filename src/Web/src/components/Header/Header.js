@@ -46,6 +46,8 @@ class Header extends Component {
         <Link className="navbar-brand" to="/"><b>Shopping Cart Demo</b></Link>
         {!isAuth &&
           <Button color="default"><Link to="/login">Login</Link></Button>}
+        {!isAuth && <Link className="pull-right" to="/payment">Payment</Link>}
+        {!isAuth && <Link className="pull-right" to="/audit">Audit</Link>}
         {isAuth &&
           <Button color="default" onClick={this.onLogoutButtonClicked}>
             Logout

@@ -36,6 +36,7 @@
     <ProjectReference Include="..\NT.Infrastructure.MessageBus.RabbitMq\NT.Infrastructure.MessageBus.RabbitMq.csproj" />
     <ProjectReference Include="..\NT.Infrastructure.MessageBus\NT.Infrastructure.MessageBus.csproj" />
     <ProjectReference Include="..\NT.Infrastructure\NT.Infrastructure.csproj" />
+    <ProjectReference Include="..\Services\NT.AuditService.Core\NT.AuditService.Core.csproj" />
     <ProjectReference Include="..\Services\NT.CatalogService.Core\NT.CatalogService.Core.csproj" />
     <ProjectReference Include="..\Services\NT.CustomerService.Core\NT.CustomerService.Core.csproj" />
     <ProjectReference Include="..\Services\NT.OrderService.Core\NT.OrderService.Core.csproj" />
