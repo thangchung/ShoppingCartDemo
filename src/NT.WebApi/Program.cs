@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using Microsoft.AspNetCore.Hosting;
 
 namespace NT.WebApi
@@ -7,6 +8,8 @@ namespace NT.WebApi
     {
         public static void Main(string[] args)
         {
+            Console.Title = "API Gateway";
+
             var host = new WebHostBuilder()
                 .UseKestrel()
                 .UseUrls("http://0.0.0.0:8888")

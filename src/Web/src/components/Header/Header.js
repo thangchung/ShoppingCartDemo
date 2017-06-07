@@ -57,6 +57,9 @@ class Header extends Component {
               </a>
             </li>
             <li className="nav-item px-1">
+              <Link className="nav-link navbar-toggler sidebar-toggler" to="/order">Order</Link>
+            </li>
+            <li className="nav-item px-1">
               <Link className="nav-link navbar-toggler sidebar-toggler" to="/payment">Payment</Link>
             </li>
             <li className="nav-item px-1">

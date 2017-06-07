@@ -16,6 +16,7 @@ using NT.Infrastructure.MessageBus;
 using NT.Infrastructure.MessageBus.Event;
 using NT.Infrastructure.MessageBus.RabbitMq;
 using NT.PaymentService.Infrastructure;
+using RawRabbit.vNext;
 
 namespace NT.PaymentService.Api
 {
@@ -50,7 +51,7 @@ namespace NT.PaymentService.Api
                 .AsSelf();
 
             // RabbitMq
-            builder.Register(x => new RabbitMqPublisher(Configuration.GetValue<string>("Rabbitmq"), "order.exchange"))
+            /*builder.Register(x => new RabbitMqPublisher(Configuration.GetValue<string>("Rabbitmq"), "order.exchange"))
                 .As<IEventBus>()
                 .SingleInstance();
 
@@ -65,10 +66,11 @@ namespace NT.PaymentService.Api
                         (IEnumerable<IMessageHandler>) x.Resolve(typeof(IEnumerable<IMessageHandler>))
                     )
                 ).As<IEventConsumer>()
-                .SingleInstance();
+                .SingleInstance();*/
 
             // Add framework services.
             services.AddMvc();
+            services.AddRawRabbit(cfg => cfg.AddJsonFile("rawrabbit.json"));
 
             builder.Populate(services);
             return builder.Build().Resolve<IServiceProvider>();

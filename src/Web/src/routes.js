@@ -7,6 +7,7 @@ import Login from "./containers/Login/Login";
 import Callback from "./containers/Login/Callback";
 import NotFound from "./containers/NotFound/NotFound";
 import Checkout from "./containers/Home/Checkout";
+import Order from "./containers/Order/Order";
 import Payment from "./containers/Payment/Payment";
 import Audit from "./containers/Audit/Audit";
 
@@ -30,6 +31,7 @@ export default store => {
         <Route name="Login" path="login" component={Login} />
         <Route path="callback" component={Callback} />
         <Route path="checkout" component={Checkout} />
+        <Route path="order" component={Order} />
         <Route path="payment" component={Payment} />
         <Route path="audit" component={Audit} />
       </Route>

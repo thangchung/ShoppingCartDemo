@@ -16,7 +16,7 @@ import {
 } from "reactstrap";
 import * as homeActions from "../../redux/modules/home";
 import ShoppingCart from "../../components/Home/ShoppingCart";
-import ThreeItems from "../../components/Home/ThreeItems";
+import ProductList from "../../components/Home/ProductList";
 
 class Home extends Component {
   componentDidMount() {
@@ -36,28 +36,12 @@ class Home extends Component {
   }
 
   render() {
-    let { products, cart, loading } = this.props.homeStore;
+    let { byIds, productObjects, products, cart, loading } = this.props.homeStore;
     let listProducts = "";
 
-    if (loading === true) {
-      listProducts = "Loading...";
-    } else {
-      let threeItems = [], index = 1;
-      const backup = products.map(p => p);
-      while (products.length > 0) {
-        threeItems = products.splice(0, 3);
-        listProducts = [
-          <ThreeItems
-            key={index}
-            products={threeItems}
-            handleAddProductClick={this.handleAddProductClick.bind(this)}
-          />,
-          listProducts
-        ];
-        index++;
-      }
-      products = backup;
-    }
+    /*if (loading === true) {
+      return <div>Loading...</div>;
+    }*/
 
     return (
       <div>
@@ -78,10 +62,13 @@ class Home extends Component {
           </CardBlock>
         </Card>
         <Container>
-          {listProducts}
+          <ProductList 
+            ids={byIds}
+            products={productObjects}
+            handleAddProductClick={this.handleAddProductClick.bind(this)} />
         </Container>
       </div>
-    );
+    )
   }
 }
 

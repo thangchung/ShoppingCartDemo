@@ -6,10 +6,10 @@ using NT.Core;
 using NT.Core.Events;
 using NT.Core.Results;
 using NT.Infrastructure.AspNetCore;
-using NT.Infrastructure.MessageBus.Event;
 using NT.OrderService.Core;
 using NT.PaymentService.Core;
-using System.Linq;
+using RawRabbit;
+using RawRabbit.vNext;
 
 namespace NT.PaymentService.Api
 {
@@ -18,14 +18,17 @@ namespace NT.PaymentService.Api
     {
         private readonly IRepository<CustomerPayment> _genericPaymentRepository;
         private readonly IRepository<PaymentMethod> _genericPaymentMethodRepository;
-        private readonly IEventBus _messageBus;
+        private readonly IBusClient _messageBus;
         private readonly RestClient _restClient;
 
-        public PaymentApiController(IRepository<CustomerPayment> genericPaymentRepository, IRepository<PaymentMethod> genericPaymentMethodRepository, IEventBus messageBus, RestClient restClient)
+        public PaymentApiController(
+            IRepository<CustomerPayment> genericPaymentRepository, 
+            IRepository<PaymentMethod> genericPaymentMethodRepository, 
+            RestClient restClient)
         {
             _genericPaymentRepository = genericPaymentRepository;
             _genericPaymentMethodRepository = genericPaymentMethodRepository;
-            _messageBus = messageBus;
+            _messageBus = BusClientFactory.CreateDefault();
             _restClient = restClient;
         }
 
@@ -33,7 +36,7 @@ namespace NT.PaymentService.Api
         public async Task<IEnumerable<CustomerPayment>> Get()
         {
             var result = await _genericPaymentRepository.ListAsync();
-            return result.OrderBy(x => x.PaymentStatus);
+            return result;
         }
 
         [HttpPost]
@@ -76,7 +79,7 @@ namespace NT.PaymentService.Api
             await _genericPaymentRepository.UpdateAsync(paymentInfo);
 
             var order = await _restClient.GetAsync<Order>("order_service", $"/api/orders/{paymentInfo.OrderId}");
-            _messageBus.Publish(new PaymentAcceptedEvent(order.SagaId.Value));
+            await _messageBus.PublishAsync(new PaymentAcceptedEvent(order.SagaId.Value));
 
             return null;
         }

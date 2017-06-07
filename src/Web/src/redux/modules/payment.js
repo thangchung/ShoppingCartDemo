@@ -3,6 +3,7 @@ const LOAD_PAYMENTS_SUCCESSED = "sc/payment/LOAD_PAYMENTS_SUCCESSED";
 const LOAD_PAYMENTS_FAILED = "sc/payment/LOAD_PAYMENTS_FAILED";
 
 const LOAD_PAYMENTS_URL = `http://localhost:8888/api/payments`;
+const CALLBACK_FROM_PAYMENT_GATEWAY_URL = `http://localhost:8888/api/payments`;
 
 const initialState = {
   loading: true,
@@ -22,6 +23,7 @@ export default function reducer(state = initialState, action = {}) {
 
     case LOAD_PAYMENTS_SUCCESSED:
       const payments = action.payments.reduce((obj, payment) => {
+        console.log(payment);
         obj[payment.id] = payment;
         return obj;
       }, {});
@@ -48,11 +50,30 @@ export default function reducer(state = initialState, action = {}) {
   }
 }
 
+export function callbackFromPaymentGateway(paymentId) {
+  console.log(paymentId);
+  return dispatch => {
+    return fetch(
+      CALLBACK_FROM_PAYMENT_GATEWAY_URL +
+        `/${paymentId}/payment-gateway-callback`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        }
+      }
+    )
+      .then(response => response.json())
+      .then(products => dispatch(getPayments()));
+  };
+}
+
 export function paymentsLoading() {
   return { type: LOAD_PAYMENTS };
 }
 
 export function loadPayments(payments) {
+  console.log(payments);
   return { type: LOAD_PAYMENTS_SUCCESSED, payments };
 }
 

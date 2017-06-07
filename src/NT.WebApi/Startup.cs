@@ -19,6 +19,7 @@ using NT.Infrastructure.AspNetCore;
 using NT.Infrastructure.MessageBus;
 using NT.Infrastructure.MessageBus.Event;
 using NT.Infrastructure.MessageBus.RabbitMq;
+using RawRabbit.vNext;
 using Swashbuckle.AspNetCore.Swagger;
 
 namespace NT.WebApi
@@ -89,7 +90,7 @@ namespace NT.WebApi
                 .AsSelf();
 
             // RabbitMq
-            builder.RegisterAssemblyTypes(typeof(Startup).GetTypeInfo().Assembly)
+            /*builder.RegisterAssemblyTypes(typeof(Startup).GetTypeInfo().Assembly)
                 .AsImplementedInterfaces();
 
             builder.Register(x => new RabbitMqPublisher(Configuration.GetValue<string>("Rabbitmq"), "order.exchange"))
@@ -101,16 +102,18 @@ namespace NT.WebApi
                 .SingleInstance();
 
             builder.Register(x =>
-                new EventConsumer(
-                    x.ResolveNamed<IEventSubscriber>("EventSubscriber"),
-                    (IEnumerable<IMessageHandler>)x.Resolve(typeof(IEnumerable<IMessageHandler>))
-                )
-            ).As<IEventConsumer>()
-            .SingleInstance();
+                    new EventConsumer(
+                        x.ResolveNamed<IEventSubscriber>("EventSubscriber"),
+                        (IEnumerable<IMessageHandler>) x.Resolve(typeof(IEnumerable<IMessageHandler>))
+                    )
+                ).As<IEventConsumer>()
+                .SingleInstance();  */
+
+            services.AddRawRabbit(cfg => cfg.AddJsonFile("rawrabbit.json"));
 
             builder.Populate(services);
             var serviceProvider = builder.Build().Resolve<IServiceProvider>();
-            serviceProvider.GetService<IEventConsumer>().Subscriber.Subscribe();
+            // serviceProvider.GetService<IEventConsumer>().Subscriber.Subscribe();
             return serviceProvider;
         }
 

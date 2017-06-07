@@ -21,6 +21,8 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="1.1.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="1.1.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="1.1.1" />
+    <PackageReference Include="RawRabbit" Version="1.10.3" />
+    <PackageReference Include="RawRabbit.vNext" Version="1.10.3" />
   </ItemGroup>
 
   <ItemGroup>
@@ -36,6 +38,12 @@
     <ProjectReference Include="..\..\NT.Infrastructure\NT.Infrastructure.csproj" />
     <ProjectReference Include="..\..\NT.Infrastructure.MessageBus.RabbitMq\NT.Infrastructure.MessageBus.RabbitMq.csproj" />
     <ProjectReference Include="..\..\NT.Infrastructure.MessageBus\NT.Infrastructure.MessageBus.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="rawrabbit.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>

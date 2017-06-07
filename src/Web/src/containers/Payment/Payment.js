@@ -44,13 +44,19 @@ class PaymentList extends Component {
                       <td>{payments[id].employeeEmail}</td>
                       <td>${payments[id].money}</td>
                       <td>
-                        {payments[id].paymentStatus === 1 &&
+                        {payments[id].paymentStatus === 0 &&
                           <Badge color="warning">Waiting</Badge>}
-                          {payments[id].paymentStatus !== 1 &&
+                        {payments[id].paymentStatus === 1 &&
                           <Badge color="success">Accepted</Badge>}
                       </td>
                       <td>
-                        <Button color="primary">Callback</Button>
+                        <Button
+                          color="primary"
+                          onClick={() =>
+                            this.props.callbackFromPaymentGateway(id)}
+                        >
+                          Callback
+                        </Button>
                       </td>
                     </tr>
                   ))}
@@ -78,7 +84,11 @@ class Payment extends Component {
       <Card>
         <CardBlock>
           <br />
-          <PaymentList ids={byIds} payments={payments} />
+          <PaymentList
+            ids={byIds}
+            payments={payments}
+            callbackFromPaymentGateway={this.props.callbackFromPaymentGateway}
+          />
         </CardBlock>
       </Card>
     );

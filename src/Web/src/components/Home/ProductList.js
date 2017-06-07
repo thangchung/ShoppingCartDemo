@@ -13,7 +13,7 @@ import {
   Input
 } from "reactstrap";
 
-export default class ThreeItems extends Component {
+class ProductList extends Component {
   constructor() {
     super();
     this.state = {
@@ -21,27 +21,23 @@ export default class ThreeItems extends Component {
     };
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    return false;
-  }
-
   onQuantityChange(value) {
     this.state.valueChange = value;
   }
 
   render() {
-    const { products, handleAddProductClick } = this.props;
-
+    const { ids, products, handleAddProductClick } = this.props;
+    // console.log(this.props);
     return (
-      <div>
+      <Container>
         <Row>
-          {products.map(product => (
-            <Col key={product.id} xs="4">
+          {ids.map((id, index) => (
+            <div key={id} className="col-sm-6 col-lg-3">
               <Card>
                 <CardBlock>
-                  <CardTitle>{product.name} </CardTitle>
-                  <CardSubtitle>{product.model}</CardSubtitle>
-                  <CardText>Price: ${product.price}</CardText>
+                  <CardTitle>{products[id].name} </CardTitle>
+                  <CardSubtitle>{products[id].model}</CardSubtitle>
+                  <CardText>Price: ${products[id].price}</CardText>
                   <Row>
                     <Col xs="6">
                       <Input
@@ -55,7 +51,7 @@ export default class ThreeItems extends Component {
                         color="success"
                         onClick={() =>
                           handleAddProductClick(
-                            product,
+                            products[id],
                             this.state.valueChange
                           )}
                       >
@@ -65,10 +61,12 @@ export default class ThreeItems extends Component {
                   </Row>
                 </CardBlock>
               </Card>
-            </Col>
+            </div>
           ))}
         </Row>
-      </div>
+      </Container>
     );
   }
 }
+
+export default ProductList;

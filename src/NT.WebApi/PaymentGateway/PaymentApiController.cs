@@ -29,6 +29,7 @@ namespace NT.WebApi.PaymentGateway
                     $"/api/users/{payment.EmployeeId}");
                 viewModels.Add(new PaymentViewModel
                 {
+                    Id = payment.Id,
                     CustomerId = payment.CustomerId,
                     CustomerName = $"{customer.FirstName} {customer.LastName}",
                     EmployeeId = payment.EmployeeId,
@@ -53,6 +54,7 @@ namespace NT.WebApi.PaymentGateway
 
     public class PaymentViewModel
     {
+        public Guid Id { get; set; }
         public Guid CustomerId { get; set; }
         public string CustomerName { get; set; }
         public Guid OrderId { get; set; }

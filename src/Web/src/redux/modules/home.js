@@ -9,6 +9,8 @@ const LOAD_HOME_PRODUCTS_URL = `http://localhost:8888/api/products`;
 
 const initialState = {
   loaded: false,
+  byIds: [],
+  productObjects: {},
   products: [],
   cart: [],
   error: null
@@ -23,8 +25,14 @@ export default function reducer(state = initialState, action = {}) {
       };
 
     case LOAD_HOME_PRODUCTS_SUCCESSED:
+      const productObjects = action.products.reduce((obj, product) => {
+        obj[product.id] = product;
+        return obj;
+      }, {});
       return {
         ...state,
+        byIds: action.products.map(product => product.id),
+        productObjects: productObjects,
         products: action.products,
         loaded: true,
         loading: false
