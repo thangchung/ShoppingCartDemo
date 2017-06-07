@@ -159,6 +159,7 @@ namespace NT.CheckoutProcess.Infrastructure
         {
             await Audit("CheckoutService", $"CheckoutSaga|OnOrderStatusFailed({_correlationId}):Trigger", "Order status is not updated successfully.");
 
+            await Audit("CheckoutService", $"CheckoutSaga|OnOrderStatusFailed({_correlationId}):Trigger", "Compensate the order status to NEW...");
             await UpdateOrderStatus(_internalData.OrderId, OrderStatus.New);
             await _machine.FireAsync(_completedTrigger, correlationId);
         }
@@ -187,10 +188,15 @@ namespace NT.CheckoutProcess.Infrastructure
         private async Task OnProductQuantityFailed(Guid correlationId)
         {
             await Audit("CheckoutService", $"CheckoutSaga|OnProductQuantityFailed({_correlationId}):Trigger", "Product quantity is not updated successfully.");
-
+            
             foreach (var product in _internalData.Products)
+            {
+                await Audit("CheckoutService", $"CheckoutSaga|OnProductQuantityFailed({_correlationId}):Trigger", $"Compensate the product quantity for [{product.ProductId}]...");
                 await CompensateQuantityOfProductInCatalog(product.ProductId, product.Quantity);
+            }
+            await Audit("CheckoutService", $"CheckoutSaga|OnProductQuantityFailed({_correlationId}):Trigger", $"Compensate the order status to NEW...");
             await UpdateOrderStatus(_internalData.OrderId, OrderStatus.New);
+
             await _machine.FireAsync(_completedTrigger, correlationId);
         }
 
@@ -203,12 +209,15 @@ namespace NT.CheckoutProcess.Infrastructure
             {
                 money += await GetProductPrice(productInOrder.ProductId) * productInOrder.Quantity;
             }
+            await Audit("CheckoutService", $"CheckoutSaga|OnMakePayment({_correlationId}):Trigger", $"Calculate the payment. The money is $[{money}].");
 
             // Submit request to order service to update WaitingPayment status, and correlationId to SagaID column
+            await Audit("CheckoutService", $"CheckoutSaga|OnMakePayment({_correlationId}):Trigger", "Update Order status to WAITINGPAYMENT.");
             await UpdateOrderStatus(_internalData.OrderId, OrderStatus.WaitingPayment);
             await UpdateSagaInfo(_internalData.OrderId, correlationId);
 
             // Submit request to payment service
+            await Audit("CheckoutService", $"CheckoutSaga|OnMakePayment({_correlationId}):Trigger", "Make a request to the payment service.");
             var result = await MakePayment(
                 _internalData.OrderId, 
                 _internalData.CustomerId, 
@@ -241,8 +250,11 @@ namespace NT.CheckoutProcess.Infrastructure
         {
             await Audit("CheckoutService", $"CheckoutSaga|OnPaymentSucceed({_correlationId}):Trigger", "The payment is processed successfully.");
 
+            await Audit("CheckoutService", $"CheckoutSaga|OnPaymentSucceed({_correlationId}):Trigger", "Update the order status to PAID.");
             await UpdateOrderStatus(_internalData.OrderId, OrderStatus.Paid);
+
             await _machine.FireAsync(_completedTrigger, correlationId);
+
             await OnSendEmail(_internalData.CustomerId);
             await OnNotifyEmployee(_internalData.EmployeeId);
         }
@@ -252,11 +264,18 @@ namespace NT.CheckoutProcess.Infrastructure
             await Audit("CheckoutService", $"CheckoutSaga|OnPaymentFailed({_correlationId}):Trigger", "The payment is not processed successfully.");
 
             // roll back money if has
+            await Audit("CheckoutService", $"CheckoutSaga|OnPaymentFailed({_correlationId}):Trigger", "Compensate money for customer.");
             await CompensateMoney(_internalData.PaymentId.Value, _internalData.Money);
 
             foreach (var product in _internalData.Products)
+            {
+                await Audit("CheckoutService", $"CheckoutSaga|OnPaymentFailed({_correlationId}):Trigger", $"Compensate the product quantity for [{product.ProductId}]...");
                 await CompensateQuantityOfProductInCatalog(product.ProductId, product.Quantity);
+            }
+
+            await Audit("CheckoutService", $"CheckoutSaga|OnProductQuantityFailed({_correlationId}):Trigger", $"Compensate the order status to NEW...");
             await UpdateOrderStatus(_internalData.OrderId, OrderStatus.New);
+
             await _machine.FireAsync(_completedTrigger, correlationId);
         }
 

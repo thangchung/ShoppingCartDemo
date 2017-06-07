@@ -45,7 +45,7 @@ namespace NT.CatalogService.Api
         public async Task<SagaResult> IncreaseQuantityInCatalog(Guid productId, int quantityInOrder)
         {
             var product = await _genericProductRepository.GetByIdAsync(productId);
-            if (product == null)
+            if (product == null && product.Quantity < 0)
                 return await Task.FromResult(new SagaResult { Succeed = false });
 
             product.Quantity += quantityInOrder;

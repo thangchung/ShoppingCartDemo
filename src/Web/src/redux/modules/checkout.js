@@ -42,7 +42,8 @@ export function doCheckoutSucceed() {
   return { type: DO_CHECKOUT_SUCCEED };
 }
 
-export function doCheckoutFailed() {
+export function doCheckoutFailed(error) {
+  console.log(error);
   return { type: DO_CHECKOUT_FAILED };
 }
 
@@ -71,7 +72,7 @@ export function doCheckout(cart, shipInfo) {
     shipInfo: shipInfo
   };
 
-  return dispatch => {
+  return (dispatch, getState) => {
     return fetch(PROCESS_CHECKOUT_URL, {
       method: "POST",
       body: JSON.stringify(payload),
@@ -80,6 +81,18 @@ export function doCheckout(cart, shipInfo) {
       }
     })
       .then(response => response.json())
-      .then(products => dispatch(doCheckoutSucceed()));
+      .then(
+        products => {
+          getState().orderStore.loading = true;
+          getState().orderStore.loaded = false;
+          getState().paymentStore.loading = true;
+          getState().paymentStore.loaded = false;
+          getState().auditStore.loading = true;
+          getState().auditStore.loaded = false;
+          getState().homeStore.cart = [];
+          return dispatch(doCheckoutSucceed());
+        },
+        error => dispatch(doCheckoutFailed(error))
+      );
   };
 }

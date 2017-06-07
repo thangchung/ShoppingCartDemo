@@ -27,7 +27,6 @@ class ProductList extends Component {
 
   render() {
     const { ids, products, handleAddProductClick } = this.props;
-    // console.log(this.props);
     return (
       <Container>
         <Row>
@@ -38,27 +37,29 @@ class ProductList extends Component {
                   <CardTitle>{products[id].name} </CardTitle>
                   <CardSubtitle>{products[id].model}</CardSubtitle>
                   <CardText>Price: ${products[id].price}</CardText>
-                  <Row>
-                    <Col xs="6">
-                      <Input
-                        type="textbox"
-                        defaultValue={this.state.valueChange}
-                        onChange={this.onQuantityChange.bind(this)}
-                      />
-                    </Col>
-                    <Col xs="6">
-                      <Button
-                        color="success"
-                        onClick={() =>
-                          handleAddProductClick(
-                            products[id],
-                            this.state.valueChange
-                          )}
-                      >
-                        Add to cart
-                      </Button>
-                    </Col>
-                  </Row>
+                  <Container>
+                    <Row>
+                      <Col xs="5">
+                        <Input
+                          type="textbox"
+                          defaultValue={this.state.valueChange}
+                          onChange={this.onQuantityChange.bind(this)}
+                        />
+                      </Col>
+                      <Col xs="5">
+                        <Button
+                          color="success"
+                          onClick={() =>
+                            handleAddProductClick(
+                              products[id],
+                              this.state.valueChange
+                            )}
+                        >
+                          Add to cart
+                        </Button>
+                      </Col>
+                    </Row>
+                  </Container>
                 </CardBlock>
               </Card>
             </div>

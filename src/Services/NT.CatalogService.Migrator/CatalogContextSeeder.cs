@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using NT.CatalogService.Core;
 using NT.CatalogService.Infrastructure;
 using NT.Core.SharedKernel;
+using NT.Infrastructure;
 
 namespace NT.CatalogService.Migrator
 {
@@ -21,7 +22,7 @@ namespace NT.CatalogService.Migrator
                     Model = $"Model {index}",
                     Price = 10,
                     Quantity = 100,
-                    DateAdded = DateTimeOffset.UtcNow.DateTime,
+                    DateAdded = DateTime.UtcNow.GetCurrentUtcDateTime(),
                     Status = Status.Published
                 });
             }
@@ -33,7 +34,7 @@ namespace NT.CatalogService.Migrator
                 Model = "Model ABA",
                 Price = 50,
                 Quantity = 100,
-                DateAdded = DateTimeOffset.UtcNow.DateTime,
+                DateAdded = DateTime.UtcNow.GetCurrentUtcDateTime(),
                 Status = Status.Published
             };
 

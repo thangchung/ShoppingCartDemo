@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
-import { Link } from "react-router";
+import { Link, browserHistory } from "react-router";
 import * as checkoutActions from "../../redux/modules/checkout";
 import {
   Button,
@@ -26,7 +26,8 @@ class Checkout extends Component {
   }
 
   doCheckout(products, shipInfo) {
-    this.props.doCheckout(products, shipInfo);
+    this.props.doCheckout(products, shipInfo).then();
+    browserHistory.push("/");
   }
 
   render() {

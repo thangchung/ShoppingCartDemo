@@ -23,7 +23,6 @@ export default function reducer(state = initialState, action = {}) {
 
     case LOAD_PAYMENTS_SUCCESSED:
       const payments = action.payments.reduce((obj, payment) => {
-        console.log(payment);
         obj[payment.id] = payment;
         return obj;
       }, {});
@@ -51,7 +50,6 @@ export default function reducer(state = initialState, action = {}) {
 }
 
 export function callbackFromPaymentGateway(paymentId) {
-  console.log(paymentId);
   return dispatch => {
     return fetch(
       CALLBACK_FROM_PAYMENT_GATEWAY_URL +
@@ -73,7 +71,6 @@ export function paymentsLoading() {
 }
 
 export function loadPayments(payments) {
-  console.log(payments);
   return { type: LOAD_PAYMENTS_SUCCESSED, payments };
 }
 

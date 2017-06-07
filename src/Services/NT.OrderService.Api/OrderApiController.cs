@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using NT.Core;
 using NT.Core.Results;
 using NT.Core.SharedKernel;
+using NT.Infrastructure;
 using NT.OrderService.Core;
 
 namespace NT.OrderService.Api
@@ -42,7 +43,7 @@ namespace NT.OrderService.Api
             {
                 CustomerId = viewModel.CustomerId,
                 EmployeeId = viewModel.EmployeeId,
-                OrderDate = DateTimeOffset.UtcNow.DateTime,
+                OrderDate = DateTime.UtcNow.GetCurrentUtcDateTime(),
                 OrderStatus = OrderStatus.New,
                 OrderDetails = viewModel.Products,
                 ShipInfo = new ShipInfo(

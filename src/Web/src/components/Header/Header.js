@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Link } from "react-router";
+import { Link, browserHistory } from "react-router";
 import { Button } from "reactstrap";
 import userManager from "../../utils/userManager";
 
@@ -28,46 +28,54 @@ class Header extends Component {
   onLogoutButtonClicked = e => {
     e.preventDefault();
     userManager.removeUser(); // removes the user data from sessionStorage
+    browserHistory.push("/");
+  };
+
+  onLoginButtonClicked = e => {
+    e.preventDefault();
+    browserHistory.push("/login");
   };
 
   render() {
     var { isAuth } = this.props;
     return (
       <header className="app-header navbar">
-        {isAuth &&
-          <button
-            className="navbar-toggler mobile-sidebar-toggler d-lg-none"
-            onClick={this.mobileSidebarToggle}
-            type="button"
-          >
-            ☰
-          </button>}
+        <Link className="navbar-brand" to="/"><b>Shopping Cart</b></Link>
 
-        <Link className="navbar-brand" to="/"><b>Shopping Cart Demo</b></Link>
-        
-        {!isAuth &&
+        {isAuth &&
           <ul className="nav navbar-nav d-md-down-none mr-auto">
-            <li className="nav-item">
-              <a
+            <li className="nav-item px-1">
+              <Link
                 className="nav-link navbar-toggler sidebar-toggler"
-                onClick={this.sidebarToggle}
-                href="#"
+                to="admin/order"
               >
-                ☰
-              </a>
+                Order
+              </Link>
             </li>
             <li className="nav-item px-1">
-              <Link className="nav-link navbar-toggler sidebar-toggler" to="/order">Order</Link>
+              <Link
+                className="nav-link navbar-toggler sidebar-toggler"
+                to="admin/payment"
+              >
+                Payment
+              </Link>
             </li>
             <li className="nav-item px-1">
-              <Link className="nav-link navbar-toggler sidebar-toggler" to="/payment">Payment</Link>
+              <Link
+                className="nav-link navbar-toggler sidebar-toggler"
+                to="admin/audit"
+              >
+                Audit
+              </Link>
             </li>
-            <li className="nav-item px-1">
-              <Link className="nav-link navbar-toggler sidebar-toggler" to="/audit">Audit</Link>
-            </li>
+
           </ul>}
-          {!isAuth &&
-          <Link className="pull-right" to="/login">Login</Link>}
+
+        <ul />
+        {!isAuth &&
+          <Button color="default" onClick={this.onLoginButtonClicked}>
+            Login
+          </Button>}
         {isAuth &&
           <Button color="default" onClick={this.onLogoutButtonClicked}>
             Logout

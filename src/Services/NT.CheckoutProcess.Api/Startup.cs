@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Reflection;
 using System.Threading.Tasks;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
@@ -16,9 +14,6 @@ using NT.CheckoutProcess.Infrastructure;
 using NT.Core;
 using NT.Core.Events;
 using NT.Infrastructure.AspNetCore;
-using NT.Infrastructure.MessageBus;
-using NT.Infrastructure.MessageBus.Event;
-using NT.Infrastructure.MessageBus.RabbitMq;
 using RawRabbit.vNext;
 
 namespace NT.CheckoutProcess.Api
@@ -56,36 +51,12 @@ namespace NT.CheckoutProcess.Api
             builder.RegisterType<CheckoutSaga>()
                 .AsSelf();
 
-            // RabbitMq
-            /*builder.RegisterAssemblyTypes(typeof(Startup).GetTypeInfo().Assembly)
-                .AsImplementedInterfaces();
-
-            builder.Register(x => new RabbitMqPublisher(Configuration.GetValue<string>("Rabbitmq"), "order.exchange"))
-                .As<IEventBus>()
-                .SingleInstance();
-
-            builder.RegisterInstance(new RabbitMqSubscriber(Configuration.GetValue<string>("Rabbitmq"),
-                    "order.exchange", "order.queue"))
-                .Named<IEventSubscriber>("EventSubscriber")
-                .SingleInstance();
-
-            builder.Register(x =>
-                    new EventConsumer(
-                        x.ResolveNamed<IEventSubscriber>("EventSubscriber"),
-                        (IEnumerable<IMessageHandler>) x.Resolve(typeof(IEnumerable<IMessageHandler>))
-                    )
-                ).As<IEventConsumer>()
-                .SingleInstance();*/
-
             // Add framework services.
             services.AddMvc();
-
             services.AddRawRabbit(cfg => cfg.AddJsonFile("rawrabbit.json"));
 
             builder.Populate(services);
             var container = builder.Build();
-            var serviceProvider = container.Resolve<IServiceProvider>();
-            // serviceProvider.GetService<IEventConsumer>().Subscriber.Subscribe();
             var client = BusClientFactory.CreateDefault();
 
             client.SubscribeAsync<CheckoutEvent>(async (msg, context) =>
@@ -100,7 +71,7 @@ namespace NT.CheckoutProcess.Api
                 await Task.Run(() => saga.PaymentAccepted(msg.SagaId));
             });
 
-            return serviceProvider;
+            return container.Resolve<IServiceProvider>();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)

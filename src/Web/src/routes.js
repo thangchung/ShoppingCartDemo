@@ -25,24 +25,22 @@ export default store => {
   };
 
   return (
-    <Route>
-      <Route path="/" name="Dashboard" component={SimpleLayout}>
-        <IndexRoute component={Home} />
+    <Route component={SimpleLayout}>
+      <Route path="/" name="Dashboard" >
+        <IndexRoute component={Home}  />
         <Route name="Login" path="login" component={Login} />
         <Route path="callback" component={Callback} />
         <Route path="checkout" component={Checkout} />
-        <Route path="order" component={Order} />
-        <Route path="payment" component={Payment} />
-        <Route path="audit" component={Audit} />
       </Route>
 
       <Route
         name="Admin"
         path="admin"
         onEnter={requireLogin}
-        component={FullLayout}
       >
-        <IndexRoute component={Home} />
+        <Route path="order" component={Order} />
+        <Route path="payment" component={Payment} />
+        <Route path="audit" component={Audit} />
       </Route>
       <Route path="*" component={NotFound} status={404} />
     </Route>

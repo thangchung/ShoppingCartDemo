@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using NT.AuditService.Core;
 using NT.Core;
 using NT.Core.Results;
+using NT.Infrastructure;
 
 namespace NT.AuditService.Api
 {
@@ -34,7 +35,7 @@ namespace NT.AuditService.Api
                 ServiceName = serviceName,
                 MethodName = methodName,
                 ActionMessage = actionMessage,
-                Created = DateTimeOffset.Now.UtcDateTime
+                Created = DateTime.UtcNow.GetCurrentUtcDateTime()
             });
             if (auditInfo == null)
                 return await Task.FromResult(new SagaResult {Succeed = false});
