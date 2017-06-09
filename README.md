@@ -6,42 +6,15 @@ The ShoppingCart project is only for the demo in training courses.
 
 ![System Overview](https://github.com/thangchung/ShoppingCartDemo/blob/master/docs/SystemOverview.png)
 
-### [Migrations](https://github.com/thangchung/ShoppingCartDemo/wiki/Migrations)
+### Migrations 
 
-### Services
+We need to run the migration to migrate and seed the sample data for services. All steps can be found at 
+[**Migrations** section](https://github.com/thangchung/ShoppingCartDemo/wiki/Migrations).
 
-- Customer Service: http://localhost:8801
-- Order Service: http://localhost:8802
-- Catalog Service: http://localhost:8803
-- Checkout Service: http://localhost:8804
-- Payment Service: http://localhost:8805
-- Audit Service (core): http://localhost:8806
-- API Gateway (core): http://localhost:8888/swagger
-- Security Service (core): http://localhost:9999/.well-known/openid-configuration (`root@shoppingcart.com` / `root`)
-- RabbitMQ endpoint (core): http://localhost:15672 (`guest` / `guest`)
-- Discovery Service (core): http://localhost:8500
+### Start the project
 
-### Saga flow
+After we run the migration, we can follow some of steps at [**How to start the project** section](https://github.com/thangchung/ShoppingCartDemo/wiki/How-to-start-the-project) to boot up the project.
 
-- The end user submits the checkout 
+### Distributed transaction
 
-![Checkout flow 1](https://github.com/thangchung/ShoppingCartDemo/blob/master/docs/CheckoutSaga_1.png)
-
-- The payment gateway accepts the payment request and calls back to Saga
-
-![Checkout flow 2](https://github.com/thangchung/ShoppingCartDemo/blob/master/docs/CheckoutSaga_2.png)
-
-### Service Discovery (Windows only)
-
-```
-consul.exe agent -dev
-```
-
-![Discovery Service](https://github.com/thangchung/ShoppingCartDemo/blob/master/docs/ServiceDiscovery.png)
-
-### RabbitMQ
-
-- Make sure installing the RabbitMQ for Windows at https://www.rabbitmq.com/install-windows.html
-- Enable the management UI at https://www.rabbitmq.com/management.html
-- Create the `root` / `root` user
-- Create the `shopping_cart` queue and `shopping_cart` vhost (assign the `root` user to this vhost)
+In this project, we implement the distributed transaction using the Saga pattern, more information about it at [**Saga implementation** section](https://github.com/thangchung/ShoppingCartDemo/wiki/Saga-implementation)
