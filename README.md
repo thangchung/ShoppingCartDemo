@@ -9,12 +9,12 @@ The ShoppingCart project is only for the demo in training courses.
 ### Migrations 
 
 We need to run the migration to migrate and seed the sample data for services. All steps can be found at 
-[**Migrations** section](https://github.com/thangchung/ShoppingCartDemo/wiki/Migrations).
+[**Migrations**](https://github.com/thangchung/ShoppingCartDemo/wiki/Migrations) section.
 
 ### Start the project
 
-After we run the migration, we can follow some of steps at [**How to start the project** section](https://github.com/thangchung/ShoppingCartDemo/wiki/How-to-start-the-project) to boot up the project.
+After we run the migration, we can follow some of steps at [**How to start the project**](https://github.com/thangchung/ShoppingCartDemo/wiki/How-to-start-the-project) section to boot up the project.
 
 ### Distributed transaction
 
-In this project, we implement the distributed transaction using the Saga pattern, more information about it at [**Saga implementation** section](https://github.com/thangchung/ShoppingCartDemo/wiki/Saga-implementation)
+In this project, we implement the distributed transaction using the [**Saga**](https://en.wikipedia.org/wiki/Long-running_transaction) pattern, more information about it at [**Saga implementation**](https://github.com/thangchung/ShoppingCartDemo/wiki/Saga-implementation) section.
