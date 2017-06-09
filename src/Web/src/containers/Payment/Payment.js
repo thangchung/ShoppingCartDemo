@@ -50,13 +50,14 @@ class PaymentList extends Component {
                           <Badge color="success">Accepted</Badge>}
                       </td>
                       <td>
-                        <Button
-                          color="primary"
-                          onClick={() =>
-                            this.props.callbackFromPaymentGateway(id)}
-                        >
-                          Callback
-                        </Button>
+                        {payments[id].paymentStatus === 0 &&
+                          <Button
+                            color="primary"
+                            onClick={() =>
+                              this.props.callbackFromPaymentGateway(id)}
+                          >
+                            Callback
+                          </Button>}
                       </td>
                     </tr>
                   ))}

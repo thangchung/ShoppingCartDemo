@@ -22,7 +22,7 @@ namespace NT.CatalogService.Migrator
                     Model = $"Model {index}",
                     Price = 10,
                     Quantity = 100,
-                    DateAdded = DateTime.UtcNow.GetCurrentUtcDateTime(),
+                    DateAdded = DateTime.UtcNow,
                     Status = Status.Published
                 });
             }
@@ -34,7 +34,7 @@ namespace NT.CatalogService.Migrator
                 Model = "Model ABA",
                 Price = 50,
                 Quantity = 100,
-                DateAdded = DateTime.UtcNow.GetCurrentUtcDateTime(),
+                DateAdded = DateTime.UtcNow,
                 Status = Status.Published
             };
 

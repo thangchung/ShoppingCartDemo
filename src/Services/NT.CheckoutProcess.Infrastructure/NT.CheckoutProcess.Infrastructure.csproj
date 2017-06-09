@@ -5,6 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="RawRabbit" Version="1.10.3" />
+    <PackageReference Include="RawRabbit.vNext" Version="1.10.3" />
     <PackageReference Include="Stateless" Version="3.1.0" />
     <PackageReference Include="System.Reactive" Version="3.1.1" />
   </ItemGroup>

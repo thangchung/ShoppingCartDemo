@@ -35,7 +35,7 @@ namespace NT.AuditService.Api
                 ServiceName = serviceName,
                 MethodName = methodName,
                 ActionMessage = actionMessage,
-                Created = DateTime.UtcNow.GetCurrentUtcDateTime()
+                Created = DateTime.UtcNow
             });
             if (auditInfo == null)
                 return await Task.FromResult(new SagaResult {Succeed = false});

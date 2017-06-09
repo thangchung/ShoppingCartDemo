@@ -17,7 +17,7 @@ namespace NT.OrderService.Migrator
                 Id = new Guid("4c9a0398-016f-4a80-be17-e756dba1e5df"),
                 CustomerId = new Guid("37EB08EF-E4C2-4211-B808-F64A81AE02FC"),
                 EmployeeId = new Guid("d3b13f7e-8978-4364-96dd-978878de9fce"),
-                OrderDate = DateTime.UtcNow.GetCurrentUtcDateTime(),
+                OrderDate = DateTime.UtcNow,
                 OrderStatus = OrderStatus.New,
                 ShipInfo = new ShipInfo(Guid.NewGuid(), "Ship Info 1", new AddressInfo(Guid.NewGuid(), "123 Address", "Hanoi", "Hoan Kiem district", "7000", "Vietnam")),
                 OrderDetails = new List<OrderDetail>
@@ -36,7 +36,7 @@ namespace NT.OrderService.Migrator
                 Id = new Guid("bc87c7fe-c853-44b1-8c02-26b8790b96bb"),
                 CustomerId = new Guid("77DE2ED8-C423-4D98-8833-D6E4CCCE5B0D"),
                 EmployeeId = new Guid("d3b13f7e-8978-4364-96dd-978878de9fce"),
-                OrderDate = DateTime.UtcNow.GetCurrentUtcDateTime(),
+                OrderDate = DateTime.UtcNow,
                 OrderStatus = OrderStatus.New,
                 ShipInfo = new ShipInfo(Guid.NewGuid(), "Ship Info 2", new AddressInfo(Guid.NewGuid(), "123 Address", "Ho Chi Minh", "Tan Binh district", "7000", "Vietnam")),
                 OrderDetails = new List<OrderDetail>

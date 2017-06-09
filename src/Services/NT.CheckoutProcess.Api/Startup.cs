@@ -62,7 +62,7 @@ namespace NT.CheckoutProcess.Api
             client.SubscribeAsync<CheckoutEvent>(async (msg, context) =>
             {
                 var saga = container.Resolve<CheckoutSaga>();
-                await Task.Run(() => saga.Checkout(new Guid(), msg.OrderId));
+                await Task.Run(() => saga.Checkout(Guid.NewGuid(), msg.OrderId));
             });
 
             client.SubscribeAsync<PaymentAcceptedEvent>(async (msg, context) =>

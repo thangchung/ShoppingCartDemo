@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using NT.CustomerService.Core;
 using NT.Infrastructure.AspNetCore;
 using NT.PaymentService.Core;
-using NT.CustomerService.Core;
 using NT.WebApi.OrderContext;
 
 namespace NT.WebApi.PaymentGateway
@@ -24,16 +24,18 @@ namespace NT.WebApi.PaymentGateway
             var viewModels = new List<PaymentViewModel>();
             foreach (var payment in payments)
             {
-                var customer = await RestClient.GetAsync<Customer>("customer_service", $"/api/customers/{payment.CustomerId}");
-                var user = await RestClient.GetAsync<UserViewModel>("security_service",
+                var customer =
+                    await RestClient.GetAsync<Customer>("customer_service", $"/api/customers/{payment.CustomerId}");
+                var user = await RestClient.GetAsync<UserViewModel>(
+                    "security_service",
                     $"/api/users/{payment.EmployeeId}");
                 viewModels.Add(new PaymentViewModel
                 {
                     Id = payment.Id,
                     CustomerId = payment.CustomerId,
-                    CustomerName = $"{customer.FirstName} {customer.LastName}",
+                    CustomerName = customer == null ? "" : $"{customer.FirstName} {customer.LastName}",
                     EmployeeId = payment.EmployeeId,
-                    EmployeeEmail = user.Email,
+                    EmployeeEmail = user == null ? "" : user.Email,
                     OrderId = payment.OrderId,
                     Money = payment.Money,
                     PaymentStatus = payment.PaymentStatus,
@@ -47,7 +49,9 @@ namespace NT.WebApi.PaymentGateway
         [HttpPost("{paymentId}/payment-gateway-callback")]
         public async Task<string> Post(Guid paymentId)
         {
-            var payment = await RestClient.PostAsync<object>("payment_service", $"/api/payments/{paymentId}/payment-gateway-callback");
+            var payment =
+                await RestClient.PostAsync<object>("payment_service",
+                    $"/api/payments/{paymentId}/payment-gateway-callback");
             return await Task.FromResult($"Payment #{paymentId} is processing...");
         }
     }

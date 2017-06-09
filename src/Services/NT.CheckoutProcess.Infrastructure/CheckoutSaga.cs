@@ -4,11 +4,14 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NT.CheckoutProcess.Core;
 using NT.Core;
+using NT.Core.Events;
 using NT.Core.Results;
 using NT.Infrastructure;
 using NT.Infrastructure.AspNetCore;
 using NT.OrderService.Core;
 using NT.PaymentService.Core;
+using RawRabbit;
+using RawRabbit.vNext;
 using Stateless;
 
 namespace NT.CheckoutProcess.Infrastructure
@@ -55,6 +58,7 @@ namespace NT.CheckoutProcess.Infrastructure
         private CheckoutInfo _internalData;
         private State _state = State.Checkout;
         private readonly ILogger _logger;
+        private IBusClient _eventBus;
 
         public CheckoutSaga(
             IRepository<SagaInfo> repository,
@@ -62,6 +66,7 @@ namespace NT.CheckoutProcess.Infrastructure
         {
             _repository = repository;
             _restClient = restClient;
+            _eventBus = BusClientFactory.CreateDefault();
             _logger = LogFactory.GetLogInstance<CheckoutSaga>();
 
             _machine = new StateMachine<State, Trigger>(() => _state, s => _state = s);
@@ -421,11 +426,12 @@ namespace NT.CheckoutProcess.Infrastructure
 
         private async Task<bool> Audit(string serviceName, string methodName, string actionMessage)
         {
-            var result = await _restClient.PostAsync<SagaResult>(
+            /*var result = await _restClient.PostAsync<SagaResult>(
                 "audit_service",
                 $"/api/audits/{serviceName}/{methodName}/{actionMessage}"
-            );
-            return result.Succeed;
+            );*/
+            await _eventBus.PublishAsync(new AddAuditEvent(serviceName, methodName, actionMessage));
+            return true;
         }
     }
 }

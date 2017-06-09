@@ -43,7 +43,7 @@ namespace NT.OrderService.Api
             {
                 CustomerId = viewModel.CustomerId,
                 EmployeeId = viewModel.EmployeeId,
-                OrderDate = DateTime.UtcNow.GetCurrentUtcDateTime(),
+                OrderDate = DateTime.UtcNow,
                 OrderStatus = OrderStatus.New,
                 OrderDetails = viewModel.Products,
                 ShipInfo = new ShipInfo(

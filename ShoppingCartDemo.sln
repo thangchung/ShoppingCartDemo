@@ -96,6 +96,20 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NT.AuditService.Migrator", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NT.AuditService.Api", "src\Services\NT.AuditService.Api\NT.AuditService.Api.csproj", "{18ABCD2D-99B7-4257-9A72-C72DE385CFCE}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BuildScripts", "BuildScripts", "{581E735B-273B-40D5-BFE8-E3A3D69A8BFA}"
+	ProjectSection(SolutionItems) = preProject
+		builds\start_all_services.ps1 = builds\start_all_services.ps1
+		builds\start_api_gateway_service.ps1 = builds\start_api_gateway_service.ps1
+		builds\start_audit_service.ps1 = builds\start_audit_service.ps1
+		builds\start_catalog_service.ps1 = builds\start_catalog_service.ps1
+		builds\start_checkout_service.ps1 = builds\start_checkout_service.ps1
+		builds\start_customer_service.ps1 = builds\start_customer_service.ps1
+		builds\start_order_service.ps1 = builds\start_order_service.ps1
+		builds\start_payment_service.ps1 = builds\start_payment_service.ps1
+		builds\start_security_service.ps1 = builds\start_security_service.ps1
+		builds\start_web.ps1 = builds\start_web.ps1
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -281,5 +295,6 @@ Global
 		{D2EECD34-1791-42BC-94BA-07F62FDCE23B} = {A9FCC537-8862-4BFF-8DF9-4108EFB4AC4E}
 		{D415E042-37BA-47A4-B066-5BC155379C98} = {A9FCC537-8862-4BFF-8DF9-4108EFB4AC4E}
 		{18ABCD2D-99B7-4257-9A72-C72DE385CFCE} = {A9FCC537-8862-4BFF-8DF9-4108EFB4AC4E}
+		{581E735B-273B-40D5-BFE8-E3A3D69A8BFA} = {6CEABC5E-C3AD-45DE-9302-1321FCAD8033}
 	EndGlobalSection
 EndGlobal
