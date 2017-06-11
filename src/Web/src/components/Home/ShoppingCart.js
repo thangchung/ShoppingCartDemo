@@ -42,24 +42,26 @@ export default class ShoppingCart extends Component {
                 <tbody>
                   {products.map((p, index) => {
                     money += p.product.price * p.quantity;
-                    return (<tr key={p.product.id}>
-                      <td>{index +1}</td>
-                      <td>{p.product.name}</td>
-                      <td>{p.product.model}</td>
-                      <td>${p.product.price}</td>
-                      <td>{p.quantity}</td>
-                      <td>
-                        {!isConfirmPage &&
-                        <Button
-                          onClick={() => handleRemoveProductFromCart(p.product)}
-                          size="sm"
-                          color="warning"
-                        >
-                          Remove
-                        </Button>
-                        }
-                      </td>
-                    </tr>)
+                    return (
+                      <tr key={p.product.id}>
+                        <td>{index + 1}</td>
+                        <td>{p.product.name}</td>
+                        <td>{p.product.model}</td>
+                        <td>${p.product.price}</td>
+                        <td>{p.quantity}</td>
+                        <td>
+                          {!isConfirmPage &&
+                            <Button
+                              onClick={() =>
+                                handleRemoveProductFromCart(p.product)}
+                              size="sm"
+                              color="warning"
+                            >
+                              Remove
+                            </Button>}
+                        </td>
+                      </tr>
+                    );
                   })}
                   <tr>
                     <td>&nbsp;</td>
@@ -75,6 +77,7 @@ export default class ShoppingCart extends Component {
           </Col>
           <Col xs="3">
             {!isConfirmPage &&
+              products.length > 0 &&
               <Button color="danger" onClick={() => handleEmptyCartClick()}>
                 Empty cart
               </Button>}
