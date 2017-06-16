@@ -47,7 +47,7 @@ class Header extends Component {
             <li className="nav-item px-1">
               <Link
                 className="nav-link navbar-toggler sidebar-toggler"
-                to="order"
+                to="admin/order"
               >
                 Order
               </Link>
@@ -55,7 +55,7 @@ class Header extends Component {
             <li className="nav-item px-1">
               <Link
                 className="nav-link navbar-toggler sidebar-toggler"
-                to="payment"
+                to="admin/payment"
               >
                 Payment
               </Link>
@@ -63,7 +63,7 @@ class Header extends Component {
             <li className="nav-item px-1">
               <Link
                 className="nav-link navbar-toggler sidebar-toggler"
-                to="audit"
+                to="admin/audit"
               >
                 Audit
               </Link>

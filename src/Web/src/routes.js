@@ -3,6 +3,7 @@ import { IndexRoute, Route } from "react-router";
 import SimpleLayout from "./containers/App/SimpleLayout";
 import FullLayout from "./containers/App/FullLayout";
 import Home from "./containers/Home/Home";
+import Admin from "./containers/Home/Admin";
 import Login from "./containers/Login/Login";
 import Callback from "./containers/Login/Callback";
 import NotFound from "./containers/NotFound/NotFound";
@@ -17,7 +18,7 @@ export default store => {
       const { oidc: { user } } = store.getState();
       if (!user) {
         // oops, not logged in, so can't be here!
-        replace("/");
+        replace("/login");
       }
       cb();
     }
@@ -25,15 +26,14 @@ export default store => {
   };
 
   return (
-    <Route component={SimpleLayout}>
-      <Route path="/" name="Dashboard">
-        <IndexRoute component={Home} />
-        <Route name="Login" path="login" component={Login} />
-        <Route path="callback" component={Callback} />
-        <Route path="checkout" component={Checkout} />
-      </Route>
+    <Route path="/" component={SimpleLayout}>
+      <IndexRoute component={Home} />
+      <Route name="Login" path="login" component={Login} />
+      <Route path="callback" component={Callback} />
+      <Route path="checkout" component={Checkout} />
 
-      <Route name="admin" path="admin" onEnter={requireLogin}>
+      <Route path="admin" onEnter={requireLogin}>
+        <IndexRoute component={Admin} />
         <Route name="order" path="order" component={Order} />
         <Route name="payment" path="payment" component={Payment} />
         <Route name="audit" path="audit" component={Audit} />
