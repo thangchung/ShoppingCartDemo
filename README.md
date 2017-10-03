@@ -1,6 +1,6 @@
 ### Introduction
 
-The ShoppingCart project is only for the demo in training courses.
+The ShoppingCart project is only for the demo in training courses and [NashTech Connect event 17/06/2017](https://www.facebook.com/events/697515040432826/).
 
 ### System overview
 
